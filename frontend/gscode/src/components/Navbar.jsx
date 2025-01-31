@@ -9,16 +9,18 @@ import {
   CardTitle,
 } from "../components/ui/Card";
 import instituteLogo from "../assets/sgsitslogo.png";
+import Waves from "./Waves";
 
 export default function Navbar() {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
+    
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Card className="w-96 shadow-lg">
         <CardHeader className="flex flex-col items-center">
           <h1 className="text-4xl font-extrabold text-center text-blue-600 md:text-6xl lg:text-7xl animate-pulse">
-            GS<span className="dark:text-black text-gray-800 dark:text-black">.Codes</span>
+            GS<span className="dark:text-black text-gray-800 ">.Codes</span>
           </h1>
           <img
             src={instituteLogo}
@@ -47,6 +49,7 @@ export default function Navbar() {
           </p>
         </CardContent>
       </Card>
+      
     </div>
   );
 }
