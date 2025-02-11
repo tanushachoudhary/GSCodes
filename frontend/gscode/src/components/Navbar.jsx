@@ -21,10 +21,10 @@ export default function Navbar() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <Card className="w-full max-w-sm shadow-lg">
         <CardHeader className="flex flex-col items-center">
-          <h1 className="text-4xl font-extrabold text-blue-600 animate-pulse">
+          <h1 className="text-6xl font-extrabold text-blue-600 animate-pulse">
             GS<span className="dark:text-black text-gray-800">.Codes</span>
           </h1>
-          <img src={instituteLogo} alt="Institute Logo" className="h-20 mb-2" />
+          <img src={instituteLogo} alt="Institute Logo" className="h-20 mb-2 mx-auto" />
           <CardTitle>{isLogin ? "Login" : "Sign Up"}</CardTitle>
         </CardHeader>
         <CardContent>
