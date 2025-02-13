@@ -3,6 +3,7 @@ import React from "react";
 import Navbar from "./components/Navbar";
 import Waves from "./components/Waves";
 import "./App.css";
+import HOME from "./components/HOME";
 
 function App() {
   return (
