@@ -1,62 +1,53 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import { styled , Button} from '@mui/material';
+import React from "react";
+import { useState } from "react";
+import { Input } from "../components/ui/Input";
+import { Button } from "../components/ui/Button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/Card";
 
-const InputField = styled(TextField)`
-    padding: 15px;
-    width: 385px;
-`
+export default function Navbar() {
+  const [isLogin, setIsLogin] = useState(true);
 
-const Btn = styled(Button)`
-    margin: 20px;
-    background-color: cyan;
-    border: none;
-    color: white
-`
-
-function Login(){
-    const [toggle, setToggle] = useState(false);
-
-    const changeLoginToSignUp = () =>{
-        setToggle(true);
-        console.log(toggle);
-    }
-
-    const changeSignUpToLogin = () =>{
-        setToggle(false);
-        console.log(toggle);
-    }
-
-    return (
-        <>
-        {toggle===false?
-            <div className='flex flex-col justify-center items-center mt-20'>
-                <div className='border shadow-md rounded-md border-gray-300 flex flex-col justify-between items-center w-96 h-[30rem] p-10'>
-                    <img src='' alt='logo'/>
-                    <InputField label="Username" variant="filled" />
-                    <InputField label="Password" variant="filled" />
-                    <Btn variant="outlined">Log In</Btn>
-                    <h1 className='text-gray-600 text-sm'>OR</h1>
-                    <p className='text-xs '>Don't have an account?</p>
-                    <Button onClick={changeLoginToSignUp}>Click to Register</Button>
-                </div>
-            </div>
-            :
-            <div className='flex flex-col justify-center items-center mt-20'>
-            <div className='border shadow-md rounded-md border-gray-300 flex flex-col justify-between items-center w-96 h-[30rem] p-10'>
-                <img src='' alt='logo'/>
-                <InputField label="Email" variant="filled" />
-                <InputField label="Username" variant="filled" />
-                <InputField label="Password" variant="filled" />
-                <Btn variant="outlined">Sign Up</Btn>
-                <h1 className='text-gray-600 text-sm'>OR</h1>
-                <p className='text-xs '>Already have an account?</p>
-                <Button onClick={changeSignUpToLogin}>Click to Login</Button>
-            </div>
-            </div>
-        }
-    </>
-    )
+  return (
+    
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <Card className="w-96 shadow-lg">
+        <CardHeader className="flex flex-col items-center">
+          <h1 className="text-xl font-extrabold text-center text-blue-600 md:text-6xl lg:text-6xl animate-pulse">
+            GS<span className="dark:text-black text-gray-800 ">.Codes</span>
+          </h1>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/en/4/4b/SGSITS_Indore.png"
+            alt="Institute Logo"
+            className="h-20 mb-2 mx-auto"
+          />
+          <CardTitle>{isLogin ? "Login" : "Sign Up"}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4">
+            <Input type="text" placeholder="Username" required />
+            <Input type="password" placeholder="Password" required />
+            {!isLogin && (
+              <Input type="password" placeholder="Confirm Password" required />
+            )}
+            <Button className="w-full">{isLogin ? "Login" : "Sign Up"}</Button>
+          </form>
+          <p className="text-center text-sm mt-4">
+            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            <span
+              className="text-blue-600 cursor-pointer"
+              onClick={() => setIsLogin(!isLogin)}
+            >
+              {isLogin ? "Sign Up" : "Login"}
+            </span>
+          </p>
+        </CardContent>
+      </Card>
+      
+    </div>
+  );
 }
-
-export default Login;
