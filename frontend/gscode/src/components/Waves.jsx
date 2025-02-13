@@ -4,7 +4,7 @@ import Wave from "react-wavify";
 
 function Waves() {
   return (
-    <div className="relative w-full h-48 overflow-hidden">
+    <div className="relative h-32 overflow-hidden">
       <Wave
         className="absolute w-full h-full"
         fill="#dbbff6"
