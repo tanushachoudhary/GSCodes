@@ -1,15 +1,20 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+// App.js
+import React from "react";
+import Navbar from "./components/Navbar";
+import Waves from "./components/Waves";
 import "./App.css";
-import Problems from "../components/Problems";
+
 function App() {
   return (
-    <>
-      <div>
-        <Problems />
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <div className="flex-grow flex items-center justify-center">
+        <Navbar />
       </div>
-    </>
+
+      <div className="w-full fixed bottom-0">
+        <Waves />
+      </div>
+    </div>
   );
 }
 
