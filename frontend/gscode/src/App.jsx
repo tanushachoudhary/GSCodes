@@ -1,15 +1,21 @@
-import WavesBackground from './Pages/WavesBackground'
-import Login from './Pages/Login'
-import './App.css'
+// App.js
+import React from "react";
+import Navbar from "./components/Navbar";
+import Waves from "./components/Waves";
+import "./App.css";
 
 function App() {
-
   return (
-    <>
-      <Login className='relative'/>
-      <WavesBackground className='absolute'/>
-    </>
-  )
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <div className="flex-grow flex items-center justify-center">
+        <Navbar />
+      </div>
+
+      <div className="w-full fixed bottom-0">
+        <Waves />
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
