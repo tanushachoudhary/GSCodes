@@ -18,7 +18,7 @@ export default function Navbar() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col mt-30 min-h-screen bg-gray-100 p-4 jsu">
       <Card className="w-full max-w-sm shadow-lg">
         <CardHeader className="flex flex-col items-center">
           <h1 className="text-6xl font-extrabold text-blue-600 animate-pulse">

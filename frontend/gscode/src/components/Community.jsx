@@ -1,12 +1,12 @@
 import React from 'react'
 
-function Footer() {
-    
+function Community() {
   return (
     <div>
+        
       
     </div>
   )
 }
 
-export default Footer
+export default Community
