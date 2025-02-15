@@ -1,12 +1,11 @@
 import React from "react";
-import Navbar from "../Components/Navbar"
-import Waves from "../Components/Waves"
+import Navbar from "../components/Navbar"
+import Waves from "../components/Waves"
 
-export default function Login() {
+function Login() {
 
   return (
-    
-    <div className="flex flex-col justify-between min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <div className="flex-grow flex items-center justify-center">
         <Navbar />
       </div>
@@ -17,3 +16,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;

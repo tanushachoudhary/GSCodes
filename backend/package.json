@@ -1,9 +1,13 @@
 {
+<<<<<<< HEAD
   "dependencies": {
     "express": "^4.21.2",
     "nodemon": "^3.1.9"
   },
   "name": "gscodes",
+=======
+  "name": "backend",
+>>>>>>> main
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -12,5 +16,18 @@
   },
   "author": "",
   "license": "ISC",
+<<<<<<< HEAD
   "description": ""
+=======
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.13.0",
+    "mongoose": "^8.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+>>>>>>> main
 }
