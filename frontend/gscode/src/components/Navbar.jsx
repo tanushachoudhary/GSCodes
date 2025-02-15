@@ -1,4 +1,3 @@
-// Navbar.js (Login Component)
 import React, { useState } from "react";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
@@ -16,6 +15,11 @@ export default function Navbar() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [enrollmentNo, setEnrollmentNo] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [passingYear, setPassingYear] = useState("");
+  const [studyingYear, setStudyingYear] = useState("");
 
   return (
     <div className="flex flex-col mt-30 min-h-screen bg-gray-100 p-4 jsu">
@@ -29,6 +33,45 @@ export default function Navbar() {
         </CardHeader>
         <CardContent>
           <form className="space-y-4">
+            {!isLogin && (
+              <>
+                <Input
+                  type="text"
+                  placeholder="Enrollment No"
+                  required
+                  value={enrollmentNo}
+                  onChange={(e) => setEnrollmentNo(e.target.value)}
+                />
+                <Input
+                  type="text"
+                  placeholder="Name"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <Input
+                  type="text"
+                  placeholder="Passing Year"
+                  required
+                  value={passingYear}
+                  onChange={(e) => setPassingYear(e.target.value)}
+                />
+                <Input
+                  type="text"
+                  placeholder="Studying Year"
+                  required
+                  value={studyingYear}
+                  onChange={(e) => setStudyingYear(e.target.value)}
+                />
+              </>
+            )}
             <Input
               type="text"
               placeholder="Username"

@@ -23,7 +23,7 @@ function Footer() {
             <a href="https://www.linkedin.com/in/tanusha-choudhary-1811c/?originalSubdomain=in" target="_blank" rel="noopener noreferrer">
               <img src={linkedinLogo} alt="LinkedIn" className="h-8 w-8 rounded-full" />
             </a>
-            <p className="text-lg">Tanusha Chaudhary</p>
+            <p className="text-lg">Tanusha Choudhary</p>
           </div>
           <div className="flex items-center gap-2">
             <a href="https://www.linkedin.com/in/teesha-dembla-1162b3262/?originalSubdomain=in" target="_blank" rel="noopener noreferrer">
