@@ -4,7 +4,8 @@ import Wave from "react-wavify";
 
 function Waves() {
   return (
-    <div className="relative w-full h-32 overflow-hidden">
+    <>
+    <div className="relative w-full h-40 overflow-hidden">
       <Wave
         className="absolute w-full h-full"
         fill="#dbbff6"
@@ -24,6 +25,7 @@ function Waves() {
         options={{ height: 120, amplitude: 30, speed: 0.13, points: 6 }}
       />
     </div>
+    </>
   );
 }
 

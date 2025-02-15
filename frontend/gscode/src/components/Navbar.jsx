@@ -1,4 +1,3 @@
-// Navbar.js (Login Component)
 import React, { useState } from "react";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
@@ -8,25 +7,47 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/Card";
-
 import instituteLogo from "../assets/sgsitslogo.png";
 
-const signUpInitialValues = {
-  username: "",
+const initialFormValues = {
   name: "",
   email: "",
   password: "",
-  year: "",
-  batch: "",
-  n_prob: "",
-}
+  confirmPassword: "",
+  enrollmentNo: "",
+  passingYear: "",
+  studyingYear: "",
+};
 
 export default function Navbar() {
   const [isLogin, setIsLogin] = useState(true);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [signup,setSignup] = useState(signUpInitialValues);
+  const [formData, setFormData] = useState(initialFormValues);
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let newErrors = {};
+    if (!formData.enrollmentNo.trim()) newErrors.enrollmentNo = "Enrollment No is required";
+    if (!isLogin) {
+      if (!formData.name.trim()) newErrors.name = "Full Name is required";
+      if (!formData.email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)) newErrors.email = "Invalid email";
+      if (!formData.passingYear.match(/^\d{4}$/)) newErrors.passingYear = "Invalid year";
+      if (!formData.studyingYear.match(/^\d{1}$/)) newErrors.studyingYear = "Invalid year";
+    }
+    if (!formData.password.trim()) newErrors.password = "Password is required";
+    if (!isLogin && formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    console.log("Form submitted", formData);
+  };
 
   return (
     <div className="flex flex-col mt-10 min-h-screen bg-gray-100 p-4">
@@ -39,41 +60,85 @@ export default function Navbar() {
           <CardTitle>{isLogin ? "Login" : "Sign Up"}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4">
-            {!isLogin && (
-              <Input
-                type="text"
-                placeholder="Email"
-                required
-              />
-            )}
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <Input
               type="text"
-              placeholder="Username"
+              name="enrollmentNo"
+              placeholder="Enrollment No"
+              value={formData.enrollmentNo}
+              onChange={handleChange}
               required
-              onChange={(e) => setUsername(e.target.value)}
             />
+            {errors.enrollmentNo && <p className="text-red-500 text-sm">{errors.enrollmentNo}</p>}
+            {!isLogin && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                <Input
+                  type="text"
+                  name="passingYear"
+                  placeholder="Passing Year"
+                  value={formData.passingYear}
+                  onChange={handleChange}
+                />
+                {errors.passingYear && <p className="text-red-500 text-sm">{errors.passingYear}</p>}
+                <Input
+                  type="text"
+                  name="studyingYear"
+                  placeholder="Studying Year"
+                  value={formData.studyingYear}
+                  onChange={handleChange}
+                />
+                {errors.studyingYear && <p className="text-red-500 text-sm">{errors.studyingYear}</p>}
+              </div>
+            )}
             <Input
               type="password"
+              name="password"
               placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
               required
-              onChange={(e) => setPassword(e.target.value)}
             />
+            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             {!isLogin && (
               <Input
                 type="password"
+                name="confirmPassword"
                 placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
                 required
-                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             )}
-            <Button className="w-full">{isLogin ? "Login" : "Sign Up"}</Button>
+            {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
+            <Button className="w-full" type="submit">{isLogin ? "Login" : "Sign Up"}</Button>
           </form>
           <p className="text-center text-sm mt-4">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <span
               className="text-blue-600 cursor-pointer"
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setFormData(initialFormValues);
+                setErrors({});
+              }}
             >
               {isLogin ? "Sign Up" : "Login"}
             </span>
