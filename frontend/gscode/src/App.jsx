@@ -1,25 +1,22 @@
 // App.js
 import React from "react";
-import Navbar from "./components/Navbar";
-import Waves from "./components/Waves";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./Pages/Login";
+import Profile from "./Pages/Profile";
+import Footer from "./components/Footer"
 import "./App.css";
 import Footer from "./components/Footer";
 
 function App() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <div className="flex-grow flex justify-center">
-        <Navbar />
-      </div>
+   <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Footer/>} />
 
-      <div className="w-full fixed bottom-0 ">
-        {/* <Waves /> */}
-      </div>
-      {/* <Footer></Footer> */}
-
-
-    </div>
-  );
+      <Route path="/profile" element={<Profile/>} />
+    </Routes>
+   </BrowserRouter>
+  )
 }
 
 export default App;

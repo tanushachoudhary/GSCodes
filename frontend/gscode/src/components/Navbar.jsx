@@ -10,6 +10,16 @@ import {
 
 import instituteLogo from "../assets/sgsitslogo.png";
 
+const signUpInitialValues = {
+  username: "",
+  name: "",
+  email: "",
+  password: "",
+  year: "",
+  batch: "",
+  n_prob: "",
+}
+
 export default function Navbar() {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
@@ -76,14 +86,12 @@ export default function Navbar() {
               type="text"
               placeholder="Username"
               required
-              value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
             <Input
               type="password"
               placeholder="Password"
               required
-              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
             {!isLogin && (
@@ -91,7 +99,6 @@ export default function Navbar() {
                 type="password"
                 placeholder="Confirm Password"
                 required
-                value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             )}
