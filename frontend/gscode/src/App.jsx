@@ -14,6 +14,8 @@ function App() {
    <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login/>} />
+      <Route path="/problems" element={<Problems />} />
+      <Route path="/problem/:id" element={<ProblemDetail/>} />
       <Route path="/profile" element={<Profile/>} />
       <Route path="/community" element={<Community />} />
     </Routes>
