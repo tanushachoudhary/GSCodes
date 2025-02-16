@@ -6,6 +6,8 @@ import Profile from "./Pages/Profile";
 import Footer from "./components/Footer";
 import Community from "./components/Community";
 import "./App.css";
+import Problems from "./components/Problems";
+import ProblemDetail from "./components/ProblemDetail";
 
 function App() {
   return (
