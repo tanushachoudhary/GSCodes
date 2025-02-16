@@ -20,22 +20,31 @@ const ProblemDetail = () => {
           <h1 className="text-4xl font-bold mb-4 p-2 text-white">
             {problem.problemTitle}
           </h1>
-          <p className="text-black text-lg p-2">
-            {problem.problemDescriptionDetail}
-          </p>
-          <p className="mt-4 text-lg p-2">
-            Difficulty :{" "}
-            <span
-              className={`font-semibold text-lg p-2 ${getDifficultyColor(
-                problem.problemDifficulty
-              )}`}
-            >
-              {problem.problemDifficulty}
-            </span>
-          </p>
-          <p className="mt-4 text-lg p-2">Created by : {problem.problemCreatedBy}</p>
-          <div className="mt-4 text-lg p-2">
-            <strong>Tags :</strong> {problem.problemTags.join(", ")}
+          <div className="bg-gray-400 rounded-2xl my-5 p-4">
+            <p className="text-black text-lg p-2">
+              {problem.problemDescriptionDetail}
+            </p>
+            <p className="mt-4 text-lg p-2">
+              Difficulty :{" "}
+              <span
+                className={`font-semibold text-lg p-2 ${getDifficultyColor(
+                  problem.problemDifficulty
+                )}`}
+              >
+                {problem.problemDifficulty}
+              </span>
+            </p>
+            <p className="mt-4 text-lg p-2">
+              Created by : {problem.problemCreatedBy}
+            </p>
+            <div className="mt-4 text-lg p-2">
+              <strong>Tags :</strong> {problem.problemTags.join(", ")}
+            </div>
+          </div>
+          <div className="bg-gray-400 rounded-2xl my-5 p-4">
+            <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">Constraints:</h3>
+            <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">Similar Problems:</h3>
+            <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900 underline"> <a href="#">Report any issue</a> </h3>
           </div>
         </div>
 
