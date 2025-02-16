@@ -47,6 +47,8 @@ export default function Navbar() {
     e.preventDefault();
     if (!validate()) return;
     console.log("Form submitted", formData);
+    setFormData(initialFormValues);
+    setErrors({})
   };
 
   return (
