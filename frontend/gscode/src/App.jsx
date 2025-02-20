@@ -8,19 +8,21 @@ import Community from "./components/Community";
 import "./App.css";
 import Problems from "./components/Problems";
 import ProblemDetail from "./components/ProblemDetail";
+import HomePage from "./Pages/HomePage";
 
 function App() {
   return (
-   <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Login/>} />
-      <Route path="/problems" element={<Problems />} />
-      <Route path="/problem/:id" element={<ProblemDetail/>} />
-      <Route path="/profile" element={<Profile/>} />
-      <Route path="/community" element={<Community />} />
-    </Routes>
-   </BrowserRouter>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/problems" element={<Problems />} />
+        <Route path="/problem/:id" element={<ProblemDetail />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/community" element={<Community />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
