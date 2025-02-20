@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import {
@@ -31,7 +31,7 @@ export default function Navbar() {
       if (!formData.name.trim()) newErrors.name = "Full Name is required";
       if (!formData.email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)) newErrors.email = "Invalid email";
       if (!formData.passingYear.match(/^\d{4}$/)) newErrors.passingYear = "Invalid year";
-      if (!formData.studyingYear.match(/^\d{1}$/)) newErrors.studyingYear = "Invalid year";
+      if (!formData.studyingYear.match(/^[1-4]$/)) newErrors.studyingYear = "Invalid year";
     }
     if (!formData.password.trim()) newErrors.password = "Password is required";
     if (!isLogin && formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
@@ -41,12 +41,16 @@ export default function Navbar() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(formData);
+    console.log(errors);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
     console.log("Form submitted", formData);
+    setFormData(initialFormValues);
+    setErrors({});
   };
 
   return (

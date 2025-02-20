@@ -10,9 +10,7 @@ function Login() {
         <Navbar />
       </div>
 
-      <div className="w-full fixed bottom-0">
-        <Waves />
-      </div>
+    
     </div>
   );
 }
