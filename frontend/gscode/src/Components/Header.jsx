@@ -18,16 +18,12 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex space-x-9 text-white mr-2">
-          <button
-            className="hover:bg-gray-300 hover:text-blue-600 text-lg cursor-pointer"
-            onClick={() =>
-              document
-                .getElementById("head")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+        <Link
+            className="hover:bg-gray-300 hover:text-blue-600 text-lg"
+            to="/"
           >
             Home
-          </button>
+          </Link>
           <button
             className="hover:bg-gray-300 hover:text-blue-600 text-lg cursor-pointer"
             onClick={() =>
