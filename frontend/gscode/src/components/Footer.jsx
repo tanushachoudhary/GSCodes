@@ -40,7 +40,7 @@ function Footer() {
           <Link className="hover:underline text-gray-300" to="/">Home</Link>
           <Link className="hover:underline text-gray-300" to="/problems">Problems</Link>
           <Link className="hover:underline text-gray-300" to="/community">Community</Link>
-          <Link className="hover:underline text-gray-300" to="/">Contact</Link>
+          <Link className="hover:underline text-gray-300" to="/contact">Contact</Link>
         </div>
 
         {/* Contact Us Section */}
