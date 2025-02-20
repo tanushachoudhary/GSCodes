@@ -18,13 +18,13 @@ function Profile(){
     },[]);
 
     return(
-        <div className="flex w-full h-full justify-center items-center bg-indigo-950">
+        <div className="flex w-full h-full justify-center items-center bg-indigo-950 text-white">
             <div className="flex flex-col w-72 h-screen justify-center items-center p-10">
                 <UserBar/>
             </div>
             <div className="flex flex-col w-3xl h-screen justify-center items-center p-10">
-                <div className="flex flex-col rounded-lg justify-center items-center py-5 bg-blue-950">
-                    <h1 className="text-2xl font-medium ml-5">{submissions} submissions in last 6 months</h1>
+                <div className="flex flex-col rounded-lg justify-center items-center py-5 bg-blue-600">
+                    <h1 className="text-2xl font-medium ml-5">{submissions} Submissions in last 6 months</h1>
                     <HeatMapBar/>
                 </div>
                 <div className="flex flex-col h-80 m-5 rounded-lg overflow-y-scroll no-scrollbar">
