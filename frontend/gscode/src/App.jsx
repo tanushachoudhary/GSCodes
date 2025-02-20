@@ -9,6 +9,7 @@ import "./App.css";
 import Problems from "./components/Problems";
 import ProblemDetail from "./components/ProblemDetail";
 import HomePage from "./Pages/HomePage";
+import ContactUs from "./Pages/ContactUs";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/problem/:id" element={<ProblemDetail />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/contact" element={<ContactUs />} />
       </Routes>
     </BrowserRouter>
   );
