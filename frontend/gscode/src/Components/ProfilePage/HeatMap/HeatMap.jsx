@@ -11,7 +11,7 @@ const HeatMap = ({data}) => {
     return "bg-orange-800";
   }
   return (
-    <div className="flex w-24 flex-wrap gap-0.5 p-5 bg-blue-950 rounded-ls shadow-lg">
+    <div className="flex w-24 flex-wrap gap-0.5 p-5 bg-blue-600 rounded-ls shadow-lg">
       {data.map((day, index) => (
         <div
           key={index}
