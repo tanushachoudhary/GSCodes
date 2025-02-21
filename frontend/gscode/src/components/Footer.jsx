@@ -1,5 +1,6 @@
 import React from "react";
 import linkedinLogo from "../assets/linkedin.png";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -36,10 +37,10 @@ function Footer() {
         {/* Quick Links */}
         <div className="flex flex-col gap-3">
           <h3 className="text-xl font-semibold">Quick Links</h3>
-          <a href="#" className="hover:underline text-gray-300">Home</a>
-          <a href="#" className="hover:underline text-gray-300">Problems</a>
-          <a href="#" className="hover:underline text-gray-300">Community</a>
-          <a href="#" className="hover:underline text-gray-300">Contact</a>
+          <Link className="hover:underline text-gray-300" to="/">Home</Link>
+          <Link className="hover:underline text-gray-300" to="/problems">Problems</Link>
+          <Link className="hover:underline text-gray-300" to="/community">Community</Link>
+          <Link className="hover:underline text-gray-300" to="/contact">Contact</Link>
         </div>
 
         {/* Contact Us Section */}
