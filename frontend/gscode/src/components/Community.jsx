@@ -67,7 +67,7 @@ const CommunityPage = () => {
       <div className="max-w-2xl mx-auto p-4 space-y-4 mt-20">
         <Header />
         {/* Post Upload Section */}
-        <div className="p-4 shadow-lg border rounded-lg">
+        <div id="community" className="p-4 shadow-lg border rounded-lg">
           <textarea
             className="w-full p-2 border rounded"
             placeholder="What's on your mind?"

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import pic from "../assets/pic.jpg";
@@ -8,6 +9,19 @@ import solve from "../assets/solve.jpg";
 import compete from "../assets/compete.jpg";
 
 const HomePage = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.substring(1));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+    }
+  }, [location]);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
@@ -81,10 +95,10 @@ const HomePage = () => {
         </div>
 
         {/* Compete & Rank */}
-        <div className="grid grid-cols-1 md:grid-cols-2 items-center  text-center mb-20">
-          <div className="w-3/4 mx-auto  justify-self-start">
-            <div className="relative group cursor-pointer ">
-              <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 "></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 items-center text-center mb-20">
+          <div className="w-3/4 mx-auto justify-self-start">
+            <div className="relative group cursor-pointer">
+              <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
               <div className="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none">
                 <h2 className="text-2xl font-semibold">Compete & Rank</h2>
                 <p className="mt-2 text-gray-600 text-xl/8">
@@ -104,7 +118,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      <hr className="text-gray-500 w-1/2 mx-auto" />
+      <hr className="text-gray-500 w-1/2 mx-auto" id="about"/>
       {/* About section */}
       <div
         id="about"

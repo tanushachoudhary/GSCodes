@@ -35,9 +35,9 @@ const ContactUs = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <section className="py-20 px-6 text-center">
+      <section className="py-20 px-6 text-center" >
         <div className="flex justify-center items-center gap-9 my-4 ">
-          <img
+          <img  id="contact"
             src={mes}
             alt="Example GIF"
             className="mt-6 rounded-lg shadow-md h-23"

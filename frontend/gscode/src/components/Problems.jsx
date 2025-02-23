@@ -25,7 +25,7 @@ const Problems = () => {
       <Header/>
       <div className="max-w-7xl m-auto">
         <div className="p-8 mx-auto font-georgia bg-gray-950 mt-20">
-          <h1 className="text-white text-center text-5xl font-bold">Problems</h1>
+          <h1 id="problems" className="text-white text-center text-5xl font-bold">Problems</h1>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-7">
             {problemList.map((problem) => (
               <Link
