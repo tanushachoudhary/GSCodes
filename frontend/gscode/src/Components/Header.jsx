@@ -20,7 +20,7 @@ const Header = () => {
         <div className="hidden md:flex space-x-9 text-white mr-2">
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/"
+            to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             Home
           </Link>
@@ -33,31 +33,31 @@ const Header = () => {
 
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/problems"
+            to="/problems" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             Problems
           </Link>
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/community"
+            to="/community" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             Community
           </Link>
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/leaderboard"
+            to="/leaderboard" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             Leaderboard
           </Link>
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/"
+            to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             Admin Panel
           </Link>
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/contact"
+            to="/contact" 
           >
             Contact
           </Link>

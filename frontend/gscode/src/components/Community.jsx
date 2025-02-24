@@ -26,7 +26,7 @@ const CommentInput = ({ onAddComment }) => {
     <div className="mt-2 flex gap-2">
       <input
         type="text"
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
         placeholder="Add a comment..."
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
@@ -38,7 +38,7 @@ const CommentInput = ({ onAddComment }) => {
             setCommentText("");
           }
         }}
-        className="bg-green-500 text-white px-3 py-2 rounded"
+        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded"
       >
         Comment
       </button>
@@ -104,13 +104,13 @@ const CommunityPage = () => {
   };
 
   return (
-    <div>
+    <div className="bg-gray-900 text-white min-h-screen">
+      <Header />
       <div className="max-w-2xl mx-auto p-4 space-y-4 mt-20">
-        <Header />
         {/* Post Upload Section */}
-        <div id="community" className="p-4 shadow-lg border rounded-lg">
+        <div id="community" className="p-4 shadow-lg border border-gray-700 rounded-lg bg-gray-800">
           <textarea
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
             placeholder="What's on your mind?"
             value={newPost.content}
             onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
@@ -118,12 +118,12 @@ const CommunityPage = () => {
           <div className="flex items-center gap-2 mt-2">
             <input
               type="file"
-              className="border p-2 rounded"
+              className="border p-2 rounded bg-gray-700 text-white"
               onChange={(e) => setNewPost({ ...newPost, image: e.target.files[0] })}
             />
             <button
               onClick={handlePostUpload}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
             >
               Post
             </button>
@@ -132,17 +132,16 @@ const CommunityPage = () => {
 
         {/* Post Feed */}
         {posts.map((post) => (
-          <div key={post.id} className="p-4 shadow-md border rounded-lg">
-            <h3 className="font-semibold">
+          <div key={post.id} className="p-4 shadow-md border border-gray-700 rounded-lg bg-gray-800">
+            <h3 className="font-semibold text-blue-400">
               {post.userId === loggedInUserId ? "You" : post.user}
             </h3>
             <p>{post.content}</p>
             {post.image && <img src={post.image} alt="post" className="mt-2 rounded" />}
-            <div className="mt-2 text-sm text-gray-500">Comments:</div>
+            <div className="mt-2 text-sm text-gray-300">Comments:</div>
             {post.comments.map((comment) => (
               <div key={comment.id} className="ml-4 mt-2">
-                <strong>{comment.userId === loggedInUserId ? "You" : comment.user}</strong>:{" "}
-                {comment.content}
+                <strong className="text-blue-300">{comment.userId === loggedInUserId ? "You" : comment.user}</strong>: {comment.content}
               </div>
             ))}
             <CommentInput onAddComment={(text) => handleAddComment(post.id, text)} />
