@@ -10,6 +10,7 @@ import Problems from "./components/Problems";
 import ProblemDetail from "./components/ProblemDetail";
 import HomePage from "./Pages/HomePage";
 import ContactUs from "./Pages/ContactUs";
+import LeaderBoardPage from "./Pages/LeaderBoardPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/community" element={<Community />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/leaderboard" element={<LeaderBoardPage/>} />
       </Routes>
     </BrowserRouter>
   );

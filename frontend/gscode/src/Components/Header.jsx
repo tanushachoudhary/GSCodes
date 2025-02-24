@@ -19,7 +19,7 @@ const Header = () => {
 
         <div className="hidden md:flex space-x-9 text-white mr-2">
         <Link
-            className="hover:bg-gray-300 hover:text-blue-600 text-lg"
+            className="hover:bg-gray-300 hover:text-blue-600 text-lg "
             to="/"
           >
             Home
@@ -48,7 +48,7 @@ const Header = () => {
           </Link>
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/"
+            to="/leaderboard"
           >
             Leaderboard
           </Link>

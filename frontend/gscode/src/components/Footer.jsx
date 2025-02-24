@@ -48,7 +48,7 @@ function Footer() {
           <h3 className="text-xl font-semibold">Contact Us</h3>
           <p>Email: <a href="mailto:gs.codes@gmail.com" className="hover:underline text-gray-300">gs.codes@gmail.com</a></p>
           <p>Phone: <a href="tel:+919876543210" className="hover:underline text-gray-300">+91 ***** 43210</a></p>
-          <p>Add: 23 Sir M. Visvesvaraya Marg,</p>
+          <p>Address: 23 Sir M. Visvesvaraya Marg,</p>
           <p>Indore, Madhya Pradesh 452003</p>
         </div>
       </div>
