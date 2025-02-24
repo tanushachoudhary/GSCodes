@@ -18,35 +18,34 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex space-x-9 text-white mr-2">
-          <a
-            href="/#head"
-            className="hover:bg-gray-300 hover:text-blue-600 text-lg cursor-pointer"
+          <Link
+            className="hover:bg-gray-300 hover:text-blue-600 text-lg"
+            to="/"
           >
             Home
-          </a>
-          <a
-            href="/#about"
-            className="hover:bg-gray-300 hover:text-blue-600 text-lg cursor-pointer"
+          </Link>
+          <Link
+            className="hover:bg-gray-300 hover:text-blue-600 text-lg"
+            to="/#about"
           >
             About
-          </a>
+          </Link>
 
           <Link
-            className="hover:bg-gray-300 hover:text-blue-600 text-lg cursor-pointer"
+            className="hover:bg-gray-300 hover:text-blue-600 text-lg"
             to="/problems"
           >
             Problems
           </Link>
           <Link
-            className="hover:bg-gray-300 hover:text-blue-600 text-lg cursor-pointer"
+            className="hover:bg-gray-300 hover:text-blue-600 text-lg"
             to="/community"
           >
             Community
           </Link>
-
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/"
+            to="/leaderboard"
           >
             Leaderboard
           </Link>
@@ -57,7 +56,7 @@ const Header = () => {
             Admin Panel
           </Link>
           <Link
-            className="hover:bg-gray-300 hover:text-blue-600 text-lg cursor-pointer"
+            className="hover:bg-gray-300 hover:text-blue-600 text-lg"
             to="/contact"
           >
             Contact
