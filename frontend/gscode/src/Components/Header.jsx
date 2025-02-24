@@ -51,12 +51,6 @@ const Header = () => {
           </Link>
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/"
-          >
-            Admin Panel
-          </Link>
-          <Link
-            className="hover:bg-gray-300 hover:text-blue-600 text-lg"
             to="/contact"
           >
             Contact
