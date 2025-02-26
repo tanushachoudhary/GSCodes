@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "../components/ui/Card";
 import instituteLogo from "../assets/sgsitslogo.png";
+import { useNavigate } from "react-router-dom";
 
 const initialFormValues = {
   name: "",
@@ -19,10 +20,17 @@ const initialFormValues = {
   studyingYear: "",
 };
 
+const intialLoginValues = {
+  username: "",
+  password: "",
+}
+
 export default function Navbar() {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState(initialFormValues);
   const [errors, setErrors] = useState({});
+  const [loginData, setLoginData] = useState(intialLoginValues);
+  const navigate = useNavigate();
 
   const validate = () => {
     let newErrors = {};
@@ -42,7 +50,6 @@ export default function Navbar() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     console.log(formData);
-    console.log(errors);
   };
 
   const handleSubmit = (e) => {
@@ -52,6 +59,25 @@ export default function Navbar() {
     setFormData(initialFormValues);
     setErrors({});
   };
+
+
+  const loginUser = () =>{
+    console.log("will login")
+    /* let response = await API.userLogin(loginData);
+    if(response.isSuccess){
+        setErrors({});
+        setLoginData(loginInitialValues);
+        sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
+        sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
+       
+        setAccount({username: response.data.username, name: response.data.name});
+        isUserAuthenticated(true);
+        Navigate('/');
+    
+    }else{
+        setErrors({loginError: "Something went wrong. Please try again later"})
+    } */
+}
 
   return (
     <div className="flex flex-col mt-10 min-h-screen bg-gray-100 p-4">
@@ -132,7 +158,7 @@ export default function Navbar() {
               />
             )}
             {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
-            <Button className="w-full" type="submit">{isLogin ? "Login" : "Sign Up"}</Button>
+            <Button onClick={isLogin ? loginUser : signupUser} className="w-full" >{isLogin ? "Login" : "Sign Up"}</Button>
           </form>
           <p className="text-center text-sm mt-4">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
