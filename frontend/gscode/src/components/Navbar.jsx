@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Header from "./Header";
+/* import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; */
 import {
   Card,
   CardContent,
@@ -10,13 +11,7 @@ import {
   CardTitle,
 } from "../components/ui/Card";
 import instituteLogo from "../assets/sgsitslogo.png";
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
-=======
-import Header from "./Header";
-
-toast.configure();
->>>>>>> d73df812c401fb0f7fad5cc36d016db6e6282ba7
 
 const initialFormValues = {
   name: "",
@@ -69,14 +64,9 @@ export default function Navbar() {
   };
 
   const handleChange = (e) => {
-<<<<<<< HEAD
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
-=======
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     validateField(name, value);
->>>>>>> d73df812c401fb0f7fad5cc36d016db6e6282ba7
   };
 
   const handleSubmit = (e) => {
@@ -123,28 +113,6 @@ export default function Navbar() {
                 alt="Institute Logo"
                 className="h-20 mb-2 mx-auto mt-3"
               />
-<<<<<<< HEAD
-            )}
-            {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
-            <Button onClick={isLogin ? loginUser : signupUser} className="w-full" >{isLogin ? "Login" : "Sign Up"}</Button>
-          </form>
-          <p className="text-center text-sm mt-4">
-            {isLogin ? "Don't have an account? " : "Already have an account? "}
-            <span
-              className="text-blue-600 cursor-pointer"
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setFormData(initialFormValues);
-                setErrors({});
-              }}
-            >
-              {isLogin ? "Sign Up" : "Login"}
-            </span>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-=======
               <CardTitle>{isLogin ? "Login" : "Sign Up"}</CardTitle>
             </CardHeader>
             <CardContent>
@@ -260,6 +228,5 @@ export default function Navbar() {
         </div>
       </div>
     </>
->>>>>>> d73df812c401fb0f7fad5cc36d016db6e6282ba7
   );
 }
