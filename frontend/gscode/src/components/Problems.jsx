@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import problems from "../assets/problemsData";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const Problems = () => {
   const [problemList, setProblemList] = useState(problems);
@@ -20,9 +22,10 @@ const Problems = () => {
 
   return (
     <div className="bg-gray-950">
+      <Header/>
       <div className="max-w-7xl m-auto">
-        <div className="p-8 mx-auto font-georgia bg-gray-950">
-          <h1 className="text-white text-center text-5xl font-bold">Problems</h1>
+        <div className="p-8 mx-auto font-georgia bg-gray-950 mt-20">
+          <h1 id="problems" className="text-white text-center text-5xl font-bold">Problems</h1>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-7">
             {problemList.map((problem) => (
               <Link
@@ -45,6 +48,7 @@ const Problems = () => {
           </ul>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };
