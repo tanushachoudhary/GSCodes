@@ -67,7 +67,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center mt-15">
       <Header />
       <div className="flex flex-col mt-10 bg-gray-100 p-4">
         <Card className="w-full max-w-sm shadow-lg">
