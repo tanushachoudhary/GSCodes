@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import Header from "./Header";
+import { API } from "../service/api";
 /* import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; */
 import {
@@ -67,23 +68,33 @@ export default function Navbar() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     validateField(name, value);
+    console.log(formData);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = Object.values(errors).every((err) => err === "");
     if (!isValid) return;
-    toast.success("Login Successful!");
+    /* toast.success("Login Successful!"); */
     console.log("Form submitted", formData);
     setFormData(initialFormValues);
     setErrors({});
   };
 
 
-  const loginUser = () =>{
-    console.log("will login")
-    /* let response = await API.userLogin(loginData);
-    if(response.isSuccess){
+  const signup = async() =>{
+    try{
+      let response = await API.userSignup(formData);
+      console.log(response.toJSON());
+    }catch(error){
+      console.log("API not functioning properly", error);
+    }
+  }
+
+  const loginUser = async() =>{
+    let response = await API.userLogin(loginData);
+    console.log(response);
+    /* if(response.isSuccess){
         setErrors({});
         setLoginData(loginInitialValues);
         sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
@@ -91,7 +102,7 @@ export default function Navbar() {
        
         setAccount({username: response.data.username, name: response.data.name});
         isUserAuthenticated(true);
-        Navigate('/');
+        navigate('/');
     
     }else{
         setErrors({loginError: "Something went wrong. Please try again later"})
@@ -204,9 +215,19 @@ export default function Navbar() {
                     {errors.confirmPassword}
                   </p>
                 )}
-                <Button className="w-full" type="submit">
+                {
+                  isLogin ?
+                  <Button onClick={loginUser} className="w-full" type="submit">
+                    Login
+                  </Button>
+                  :
+                  <Button onClick={signup} className="w-full" type="submit">
+                    Signup
+                  </Button>
+                }{/* 
+                <Button  className="w-full" type="submit">
                   {isLogin ? "Login" : "Sign Up"}
-                </Button>
+                </Button> */}
               </form>
               <p className="text-center text-sm mt-4">
                 {isLogin
