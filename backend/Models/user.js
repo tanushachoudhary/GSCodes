@@ -28,9 +28,18 @@ const userSchema = new mongoose.Schema({
     n_probs: {
         type: Number,
         default: 0,
-    }
+    },
+    questionsSolved: [
+        {
+            questionId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Question",
+            },
+        }
+    ],
+
 }) 
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 export default User;
 

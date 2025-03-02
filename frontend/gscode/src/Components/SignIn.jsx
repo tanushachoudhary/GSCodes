@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
-import { toast } from "react-toastify";
+import { ToastContainer ,toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 import instituteLogo from "../assets/sgsitslogo.png";
 import Header from "./Header";
+import {API} from "../service/api.js";
+import { Navigate, useNavigate } from "react-router-dom";
 
-toast.configure();
 
-export default function SignIn() {
-  const [formData, setFormData] = useState({ enrollmentNo: "", password: "" });
+const initialLogInValues = {
+  enrollmentNo : "",
+  password: "",
+}
+
+export default function SignIn({userAuthentication}) {
+  const [formData, setFormData] = useState(initialLogInValues);
   const [errors, setErrors] = useState({});
 
+  const navigate = useNavigate();
   const validateField = (name, value) => {
     let error = "";
     if (name === "enrollmentNo") {
@@ -31,13 +38,17 @@ export default function SignIn() {
     validateField(name, value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (Object.values(errors).some((err) => err !== "")) return;
     toast.success("Login Successful!");
+    let response = await API.userLogin(formData);
     console.log("Login Form Submitted", formData);
+    console.log(response);
+    userAuthentication(true);
     setFormData({ enrollmentNo: "", password: "" });
     setErrors({});
+    navigate("/");
   };
 
   return (

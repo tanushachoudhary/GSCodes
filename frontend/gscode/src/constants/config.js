@@ -1,6 +1,6 @@
 export const SERVICE_URL = {
     userSignup : {url:"/signup" , method: 'POST'},
-    userLogin : {url: "/login", method: 'GET'}
+    userLogin : {url: "/login", method: 'POST'}
 }
 
 export const API_NOTIF_MESSAGES = {
