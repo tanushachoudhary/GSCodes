@@ -11,6 +11,7 @@ import ProblemDetail from "./components/ProblemDetail";
 import HomePage from "./Pages/HomePage";
 import ContactUs from "./Pages/ContactUs";
 import LeaderBoardPage from "./Pages/LeaderBoardPage";
+import SignUp from "./components/SignUp";
 
 function App() {
   return (
@@ -18,12 +19,14 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/problems" element={<Problems />} />
         <Route path="/problem/:id" element={<ProblemDetail />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/community" element={<Community />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/leaderboard" element={<LeaderBoardPage/>} />
+        
       </Routes>
     </BrowserRouter>
   );
