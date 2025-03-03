@@ -86,6 +86,12 @@ export default function SignUp() {
               {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
               <Input type="text" name="enrollmentNo" placeholder="Enrollment No" value={formData.enrollmentNo} onChange={handleChange} required />
               {errors.enrollmentNo && <p className="text-red-500 text-sm">{errors.enrollmentNo}</p>}
+              <div className="flex space-x-4">
+                <Input type="text" name="passingYear" placeholder="Passing Year" value={formData.passingYear} onChange={handleChange} required />
+                <Input type="text" name="studyingYear" placeholder="Studying Year" value={formData.studyingYear} onChange={handleChange} required />
+              </div>
+              {errors.passingYear && <p className="text-red-500 text-sm">{errors.passingYear}</p>}
+              {errors.studyingYear && <p className="text-red-500 text-sm">{errors.studyingYear}</p>}
               <Input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
               <Input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required />
