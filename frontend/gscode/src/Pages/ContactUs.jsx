@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     message: "",
   });
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,23 +21,25 @@ const ContactUs = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast.success(
-      "Thank you for your submission! We will get back to you soon."
-    );
+    toast.success("Thank you for your submission! We will get back to you soon.");
+    
+    const mailtoLink = `mailto:tanushac1811@gmail.com?subject=Contact Us - Query&body=Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0AMessage: ${formData.message}`;
+    window.location.href = mailtoLink;
+
     setFormData({
+      name: "",
       email: "",
       message: "",
     });
-
-    setIsSubmitted(true);
   };
 
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <section className="py-20 px-6 text-center" >
-        <div className="flex justify-center items-center gap-9 my-4 ">
-          <img  id="contact"
+      <section className="py-20 px-6 text-center">
+        <div className="flex justify-center items-center gap-9 my-4">
+          <img
+            id="contact"
             src={mes}
             alt="Example GIF"
             className="mt-6 rounded-lg shadow-md h-23"
@@ -46,13 +48,12 @@ const ContactUs = () => {
         </div>
 
         <p className="text-lg mb-7">
-          We would love to hear from you! Feel free to send us your queries or
-          suggestions.
+          We would love to hear from you! Feel free to send us your queries or suggestions.
         </p>
 
         <form
           onSubmit={handleSubmit}
-          className="max-w-2xl mx-auto bg-white p-9 rounded-2xl shadow-xl"
+          className="max-w-xl mx-auto bg-white p-9 rounded-2xl shadow-xl"
         >
           {/* Name Input */}
           <div className="mb-4">
@@ -65,7 +66,7 @@ const ContactUs = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-120 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -80,17 +81,14 @@ const ContactUs = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-120 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
 
           {/* Message Input */}
           <div className="mb-6">
-            <label
-              htmlFor="message"
-              className="block text-lg font-semibold mb-2"
-            >
+            <label htmlFor="message" className="block text-lg font-semibold mb-2">
               Your Query / Suggestion
             </label>
             <textarea
@@ -99,7 +97,7 @@ const ContactUs = () => {
               value={formData.message}
               onChange={handleChange}
               rows="4"
-              className="w-120 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             ></textarea>
           </div>
@@ -107,7 +105,7 @@ const ContactUs = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-120 bg-blue-600 text-white py-3 rounded-lg text-lg hover:bg-blue-700"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg text-lg hover:bg-blue-700 cursor-pointer"
           >
             Submit
           </button>
