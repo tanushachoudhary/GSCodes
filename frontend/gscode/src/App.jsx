@@ -12,6 +12,7 @@ import HomePage from "./Pages/HomePage";
 import ContactUs from "./Pages/ContactUs";
 import LeaderBoardPage from "./Pages/LeaderBoardPage";
 import SignUp from "./components/SignUp";
+import AddProblem from "./Pages/AddProblem";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/problems" element={<Problems />} />
         <Route path="/problem/:id" element={<ProblemDetail />} />
+        <Route path="/add-problem" element={<AddProblem />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/community" element={<Community />} />
         <Route path="/contact" element={<ContactUs />} />
