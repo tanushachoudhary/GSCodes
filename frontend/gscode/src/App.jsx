@@ -13,6 +13,7 @@ import ContactUs from "./Pages/ContactUs";
 import LeaderBoardPage from "./Pages/LeaderBoardPage";
 import SignUp from "./components/SignUp";
 import AddProblem from "./Pages/AddProblem";
+import EditProblem from "./Pages/EditProblem";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/problems" element={<Problems />} />
         <Route path="/problem/:id" element={<ProblemDetail />} />
         <Route path="/add-problem" element={<AddProblem />} />
+        <Route path="/edit-problem" element={<EditProblem />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/community" element={<Community />} />
         <Route path="/contact" element={<ContactUs />} />
