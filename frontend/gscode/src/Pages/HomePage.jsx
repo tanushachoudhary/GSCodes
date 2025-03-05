@@ -29,40 +29,43 @@ const HomePage = () => {
       {/* Hero Section */}
       <header
         id="head"
-        className="text-center py-16 bg-blue-600 text-white bg-cover bg-center h-dvh"
+        className="text-center py-16 bg-blue-600 text-white bg-cover bg-center min-h-svh flex flex-col justify-center items-center px-5"
         style={{ backgroundImage: `url(${pic})` }}
       >
-        <div className="bg-black opacity-80 p-10 rounded-3xl inline-block mt-40 border-2 border-white shadow-[0_0_15px_rgba(255,255,255,0.8)]">
-          <h1 className="text-4xl font-bold">Solve, Discuss & Compete</h1>
+        <div className="bg-black bg-opacity-70 p-8 rounded-3xl border-2 border-white shadow-lg max-w-lg text-center">
+          <h1 className="text-3xl md:text-4xl font-bold">
+            Solve, Discuss & Compete
+          </h1>
           <p className="mt-4 text-lg">
             A platform for students to enhance their coding skills.
           </p>
           <Link to="/login">
-            <button className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold cursor-pointer rounded-lg shadow-md hover:bg-blue-600 hover:text-white">
+            <button className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-md hover:bg-blue-600 hover:text-white transition duration-300 cursor-pointer">
               Get Started
             </button>
           </Link>
         </div>
       </header>
-
       {/* Features Section */}
       <section className="py-16 px-6 grid gap-12 mt-20">
         {/* Solve Problems */}
         <div className="grid grid-cols-1 md:grid-cols-2 items-center text-center mb-20">
           <div className="w-3/4 mx-auto justify-self-start">
-            <div className="relative group cursor-pointer">
-              <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none">
-                <h2 className="text-2xl font-semibold">Solve Problems</h2>
-                <p className="mt-2 text-gray-600 text-xl/8">
-                  • Practice coding with a variety of problems.
-                  <br />
-                  • Strengthen your programming skills.
-                  <br />• Get hands-on experience with algorithms, data
-                  structures, and optimization techniques.
-                </p>
+            <Link to="/problems">
+              <div className="relative group cursor-pointer">
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none">
+                  <h2 className="text-2xl font-semibold">Solve Problems</h2>
+                  <p className="mt-2 text-gray-600 text-xl/8">
+                    • Practice coding with a variety of problems.
+                    <br />
+                    • Strengthen your programming skills.
+                    <br />• Get hands-on experience with algorithms, data
+                    structures, and optimization techniques.
+                  </p>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
           <img
             src={solve}
@@ -79,36 +82,40 @@ const HomePage = () => {
             className="w-xl rounded-xl shadow-lg ml-30 "
           />
           <div className="w-3/4 ml-20 justify-self-start">
-            <div className="relative group cursor-pointer">
-              <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none">
-                <h2 className="text-2xl font-semibold">Discuss Solutions</h2>
-                <p className="mt-2 text-gray-600 text-xl/8">
-                  • Engage with the community to share insights. <br /> •
-                  Collaborate with like-minded programmers and improve your
-                  problem-solving skills. <br />• Share your approaches, learn
-                  new techniques, and explore alternative solutions.
-                </p>
+            <Link to="/community">
+              <div className="relative group cursor-pointer">
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none">
+                  <h2 className="text-2xl font-semibold">Discuss Solutions</h2>
+                  <p className="mt-2 text-gray-600 text-xl/8">
+                    • Engage with the community to share insights. <br /> •
+                    Collaborate with like-minded programmers and improve your
+                    problem-solving skills. <br />• Share your approaches, learn
+                    new techniques, and explore alternative solutions.
+                  </p>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
 
         {/* Compete & Rank */}
         <div className="grid grid-cols-1 md:grid-cols-2 items-center text-center mb-20">
           <div className="w-3/4 mx-auto justify-self-start">
-            <div className="relative group cursor-pointer">
-              <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none">
-                <h2 className="text-2xl font-semibold">Compete & Rank</h2>
-                <p className="mt-2 text-gray-600 text-xl/8">
-                  • Challenge others and climb the leaderboard. <br />
-                  • Test your skills against top programmers.
-                  <br />• Earn points, unlock achievements, and see where you
-                  rank among your peers.
-                </p>
+            <Link to="/leaderboard">
+              <div className="relative group cursor-pointer">
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none">
+                  <h2 className="text-2xl font-semibold">Compete & Rank</h2>
+                  <p className="mt-2 text-gray-600 text-xl/8">
+                    • Challenge others and climb the leaderboard. <br />
+                    • Test your skills against top programmers.
+                    <br />• Earn points, unlock achievements, and see where you
+                    rank among your peers.
+                  </p>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
           <img
             src={compete}
@@ -118,17 +125,14 @@ const HomePage = () => {
         </div>
       </section>
 
-      <hr className="text-gray-500 w-1/2 mx-auto" id="about"/>
+      <hr className="text-gray-500 w-1/2 mx-auto" id="about" />
       {/* About section */}
       <div
         id="about"
-        className="bg-gradient-to-r from-blue-500 to-blue-800 text-white p-6 rounded-3xl my-20 w-1/2 mx-auto"
-        style={{
-          boxShadow: "0 0 20px rgb(0, 0, 102)",
-        }}
+        className="bg-gradient-to-r from-blue-500 to-blue-800 text-white p-8 rounded-3xl my-20 max-w-3xl mx-auto text-left shadow-xl"
       >
-        <h1 className="text-5xl">About Us</h1>
-        <p className="text-lg/9 mt-5 ">
+        <h1 className="text-3xl md:text-4xl text-center">About Us</h1>
+        <p className="mt-5 text-lg leading-relaxed">
           • Community Page: Dedicated community page for all year students,
           fostering interaction, knowledge sharing, and mentorship. <br />
           • Guidance from Seniors: 4th-year students can share valuable
@@ -142,9 +146,10 @@ const HomePage = () => {
           profiles, track progress, and engage in healthy competition,
           motivating everyone to push their limits. <br /> This platform is more
           than just a website—it's a supportive ecosystem where IT students
-          learn, compete, and grow together for a brighter future. 🚀
+          learn, compete, and grow together for a brighter future
         </p>
       </div>
+
       <Footer />
     </div>
   );
