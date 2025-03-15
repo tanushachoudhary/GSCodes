@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import instituteLogo from "../assets/sgsitslogo.png";
 import { Link } from "react-router-dom";
+import { DataContext } from "../context/DataProvider";
 
-const Header = () => {
+const Header = ({authStatus}) => {
+  const {account} = useContext(DataContext);
   return (
     <nav className="bg-blue-600 opacity-95 w-screen fixed top-0 left-0 z-50">
       <div className="flex items-center justify-between w-full px-4 md:px-8 py-3">
@@ -49,18 +51,31 @@ const Header = () => {
           >
             Leaderboard
           </Link>
-          <Link
-            className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-            to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
-            Admin Panel
-          </Link>
+          {
+            account.role === "Admin" ?
+
+            <Link
+                className="hover:bg-gray-300 hover:text-blue-600 text-lg"
+                to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              >
+                Admin Panel
+            </Link>
+            :
+            <></>
+          }
           <Link
             className="hover:bg-gray-300 hover:text-blue-600 text-lg"
             to="/contact" 
           >
             Contact
           </Link>
+          {account.username &&
+            <Link
+            to="/profile"
+          >
+            Profile
+          </Link>
+          }
         </div>
       </div>
     </nav>

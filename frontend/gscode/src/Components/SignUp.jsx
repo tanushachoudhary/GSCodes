@@ -6,20 +6,24 @@ import "react-toastify/dist/ReactToastify.css";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 import instituteLogo from "../assets/sgsitslogo.png";
 import Header from "./Header";
+import {API} from "../service/api.js";
 
-toast.configure();
+/* toast.configure(); */
+const initialFormValues = {
+  role: "",
+  enrollmentNo: "",
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  passingYear: "",
+  studyingYear: "",
+};
+
+
 
 export default function SignUp() {
-  const initialFormValues = {
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    enrollmentNo: "",
-    passingYear: "",
-    studyingYear: "",
-  };
-
+  const roleList = ["Admin", "Student"];
   const [formData, setFormData] = useState(initialFormValues);
   const [errors, setErrors] = useState({});
 
@@ -57,11 +61,13 @@ export default function SignUp() {
     validateField(name, value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (Object.values(errors).some((err) => err !== "")) return;
+    let response = await API.userSignup(formData);
     toast.success("Sign Up Successful!");
     console.log("Sign Up Form Submitted", formData);
+    console.log(response);
     setFormData(initialFormValues);
     setErrors({});
   };
@@ -80,22 +86,28 @@ export default function SignUp() {
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleSubmit}>
+              <select className='border p-2 rounded' name="role" value={formData.role} onChange={(e)=>setFormData({...formData, [e.target.name]: e.target.value})}>
+                  <option value="">Select a role</option>
+                  {
+                      roleList.map((role)=>(
+                          <option key={role} value={role}>{role}</option>
+                      ))
+                  }
+              </select>
+              <Input type="text" name="enrollmentNo" placeholder="Enrollment Number" value={formData.enrollmentNo} onChange={handleChange} required/>
+              {errors.enrollmentNo && <p className="text-red-500 text-sm">{errors.enrollmentNo}</p>}
               <Input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
               {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
               <Input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
               {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-              <Input type="text" name="enrollmentNo" placeholder="Enrollment No" value={formData.enrollmentNo} onChange={handleChange} required />
-              {errors.enrollmentNo && <p className="text-red-500 text-sm">{errors.enrollmentNo}</p>}
-              <div className="flex space-x-4">
-                <Input type="text" name="passingYear" placeholder="Passing Year" value={formData.passingYear} onChange={handleChange} required />
-                <Input type="text" name="studyingYear" placeholder="Studying Year" value={formData.studyingYear} onChange={handleChange} required />
-              </div>
-              {errors.passingYear && <p className="text-red-500 text-sm">{errors.passingYear}</p>}
-              {errors.studyingYear && <p className="text-red-500 text-sm">{errors.studyingYear}</p>}
               <Input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
               <Input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required />
               {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
+              <Input type="text" name="passingYear" placeholder="Batch" value={formData.passingYear} onChange={handleChange} required/>
+              {errors.passingYear && <p className="text-red-500 text-sm">{errors.passingYear}</p>}
+              <Input type="text" name="studyingYear" placeholder="Year of Study" value={formData.studyingYear} onChange={handleChange} required />
+              {errors.studyingYear && <p className="text-red-500 text-sm">{errors.studyignYear}</p>}
               <Button className="w-full" type="submit">Sign Up</Button>
             </form>
             <p className="text-center text-sm mt-4">

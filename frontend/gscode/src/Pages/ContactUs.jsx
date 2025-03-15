@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import mes from "../assets/message.gif";
-import { toast } from "react-toastify";
+/* import { toast } from "react-toastify"; */
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
