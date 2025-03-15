@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import problems from "../assets/problemsData";
+import { API } from "../service/api";
 
 const ProblemDetail = () => {
   const [code, setCode] = useState("");
@@ -35,8 +36,9 @@ int main( ) {
   }
 
   return (
-    <div className="bg-gray-950 h-screen p-4 overflow-y-auto">
-      <div className="flex flex-col md:flex-row h-full gap-5">
+    <div className="bg-gray-950 h-screen p-4 overflow-hidden">
+      <button>Update</button>
+      <div className="flex h-full gap-5">
         {/* Left Section: Problem Details */}
         <div className="w-full md:w-1/2 bg-gray-400 p-6 rounded-xl shadow-md justify-center">
           <h1 className="text-4xl font-bold mb-4 p-2 text-gray-900">

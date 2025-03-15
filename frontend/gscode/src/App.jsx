@@ -1,6 +1,6 @@
 // App.js
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Login from "./Pages/Login";
 import Profile from "./Pages/Profile";
 import Footer from "./components/Footer";
@@ -14,13 +14,25 @@ import LeaderBoardPage from "./Pages/LeaderBoardPage";
 import SignUp from "./components/SignUp";
 import AddProblem from "./Pages/AddProblem";
 import EditProblem from "./Pages/EditProblem";
+import DataProvider from "./context/DataProvider";
+
+const PrivateRoute = ({isAuthenticatedPriv,})=>{
+  return isAuthenticatedPriv ? 
+  <>
+    <Outlet/>
+  </>
+  :
+  <Navigate replace to="/login"/>
+}
 
 function App() {
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   return (
-    <BrowserRouter>
+    <DataProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login userAuthentication = {setIsUserAuthenticated} authStatus= {isUserAuthenticated}/>} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/problems" element={<Problems />} />
         <Route path="/problem/:id" element={<ProblemDetail />} />
@@ -33,6 +45,7 @@ function App() {
         
       </Routes>
     </BrowserRouter>
+    </DataProvider>
   );
 }
 
