@@ -67,10 +67,10 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center mt-15">
+    <div className="flex flex-col justify-center bg-gray-100 items-center mt-15">
       <Header />
       <div className="flex flex-col mt-10 bg-gray-100 p-4">
-        <Card className="w-full max-w-sm shadow-lg">
+        <Card className="w-full max-w-xl shadow-lg">
           <CardHeader className="flex flex-col items-center">
             <h1 className="text-6xl font-extrabold text-blue-600 animate-pulse">
               GS<span className="dark:text-black text-gray-800">.Codes</span>
