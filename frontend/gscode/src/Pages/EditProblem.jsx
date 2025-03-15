@@ -1,124 +1,163 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm, useFieldArray } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { toast } from "react-toastify";
 
 const EditProblem = () => {
-  const { register, handleSubmit, control } = useForm();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "testCases",
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    difficulty: "",
+    tags: "",
+    constraints: "",
+    testCases: [],
   });
 
-  const initialValue={
-    
-  }
+  useEffect(() => {
+    // Fetch existing problem details
+    const fetchProblem = async () => {
+      try {
+        const response = await fetch(`/api/problems/${id}`);
+        const data = await response.json();
+        setFormData(data);
+      } catch (error) {
+        console.error("Error fetching problem details:", error);
+      }
+    };
+    fetchProblem();
+  }, [id]);
 
-  
-
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
-  const onSubmit = async (data) => {
-    setLoading(true);
-    try {
-      console.log("Edit problem:", data);
-      toast.success("Problem submitted successfully!");
-      navigate("/problems");
-    } catch (error) {
-      console.error("Error submitting problem:", error);
-    } finally {
-      setLoading(false);
-    }
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleTestCaseChange = (index, field, value) => {
+    const updatedTestCases = [...formData.testCases];
+    updatedTestCases[index][field] = value;
+    setFormData({ ...formData, testCases: updatedTestCases });
+  };
+
+  const addTestCase = () => {
+    setFormData({
+      ...formData,
+      testCases: [...formData.testCases, { input: "", output: "" }],
+    });
+  };
+
+  const removeTestCase = (index) => {
+    setFormData({
+      ...formData,
+      testCases: formData.testCases.filter((_, i) => i !== index),
+    });
+  };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     await fetch(`/api/problems/${id}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+  //     toast.success("Problem updated successfully!");
+  //     navigate("/problems");
+  //   } catch (error) {
+  //     console.error("Error updating problem:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="bg-gray-950 min-h-screen flex flex-col">
       <Header />
-      <div className="max-w-3xl mx-auto w-full md:w-3/4 lg:w-2/5 p-6 bg-gray-400 shadow-md rounded-md mt-32 mb-20 ">
-        <h1 className="text-3xl font-bold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-700 to-blue-900 ">
+      <div className="max-w-3xl mx-auto w-full md:w-3/4 lg:w-2/5 p-6 bg-gray-400 shadow-md rounded-md mt-32 mb-20">
+        <h1 className="text-3xl font-bold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-700 to-blue-900">
           Edit Problem
         </h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Title */}
-          <div>
-            <label className="block font-medium">Title</label>
-            <input
-              {...register("title", { required: true })}
-              className="w-full p-2 mt-1 rounded bg-white  focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-              placeholder="Enter problem title"
-            />
-          </div>
+        <form className="space-y-4">
+          <input
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter problem title"
+            required
+          />
 
-          {/* Description */}
-          <div>
-            <label className="block font-medium">Description</label>
-            <textarea
-              {...register("description", { required: true })}
-              className="w-full p-2 mt-1 rounded bg-white  focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-              placeholder="Describe the problem..."
-            />
-          </div>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
+            placeholder="Describe the problem..."
+            required
+          />
 
-          {/* Difficulty */}
-          <div>
-            <label className="block font-medium">Difficulty</label>
-            <select
-              {...register("difficulty", { required: true })}
-              className="w-full p-2 mt-1 rounded bg-white  focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-            >
-              <option value="">Select difficulty</option>
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Hard">Hard</option>
-            </select>
-          </div>
+          <select
+            name="difficulty"
+            value={formData.difficulty}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
+            required
+          >
+            <option value="">Select difficulty</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
 
-          {/* Tags */}
-          <div>
-            <label className="block font-medium">Tags (comma-separated)</label>
-            <input
-              {...register("tags")}
-              className="w-full p-2 mt-1 rounded bg-white  focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-              placeholder="e.g., Array, Dynamic Programming"
-            />
-          </div>
+          <input
+            name="tags"
+            value={formData.tags}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
+            placeholder="Tags (comma-separated)"
+          />
 
-          {/* Constraints */}
-          <div>
-            <label className="block font-medium">Constraints</label>
-            <textarea
-              {...register("constraints")}
-              className="w-full p-2 rounded mt-1 bg-white  focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-              placeholder="e.g., 1 ≤ n ≤ 10^5"
-            />
-          </div>
+          <textarea
+            name="constraints"
+            value={formData.constraints}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
+            placeholder="Constraints (e.g., 1 ≤ n ≤ 10^5)"
+          />
 
-          {/* Test Cases */}
           <div>
             <label className="block font-medium">Test Cases</label>
-            {fields.map((item, index) => (
+            {formData.testCases.map((testCase, index) => (
               <div
-                key={item.id}
-                className="flex flex-col md:flex-row md:space-x-2 items-center mb-2  animate__delay-2.2s"
+                key={index}
+                className="flex flex-col md:flex-row md:space-x-2 items-center mb-2"
               >
                 <input
-                  {...register(`testCases.${index}.input`)}
-                  className="p-2  rounded w-full md:w-1/2 bg-white mb-2 focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                  value={testCase.input}
+                  onChange={(e) =>
+                    handleTestCaseChange(index, "input", e.target.value)
+                  }
+                  className="p-2 rounded w-full md:w-1/2 bg-white focus:ring-2 focus:ring-blue-500"
                   placeholder="Input"
                 />
                 <input
-                  {...register(`testCases.${index}.output`)}
-                  className="p-2 border rounded w-full md:w-1/2 bg-white mb-2 focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                  value={testCase.output}
+                  onChange={(e) =>
+                    handleTestCaseChange(index, "output", e.target.value)
+                  }
+                  className="p-2 rounded w-full md:w-1/2 bg-white focus:ring-2 focus:ring-blue-500"
                   placeholder="Expected Output"
                 />
                 <button
                   type="button"
-                  className="p-2 bg-red-500 text-white rounded cursor-pointer w-full md:w-auto transition-all duration-300 transform hover:scale-110"
-                  onClick={() => remove(index)}
+                  className="p-2 bg-red-500 text-white rounded w-full md:w-auto hover:scale-110"
+                  onClick={() => removeTestCase(index)}
                 >
                   ✕
                 </button>
@@ -126,20 +165,19 @@ const EditProblem = () => {
             ))}
             <button
               type="button"
-              className="w-full md:w-auto p-2 bg-amber-400 text-black rounded mt-2 cursor-pointer transition-all duration-300 transform hover:scale-110"
-              onClick={() => append({ input: "", output: "" })}
+              className="w-full md:w-auto p-2 bg-amber-400 text-black rounded mt-2 cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-110"
+              onClick={addTestCase}
             >
               ➕ Add Test Case
             </button>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full p-3 bg-blue-600 text-white rounded hover:bg-blue-800 text-xl cursor-pointer transition-all duration-300 transform hover:scale-102"
+            className="w-full p-3 bg-blue-600 text-white rounded hover:bg-blue-800 text-xl cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105"
             disabled={loading}
           >
-            {loading ? "Submitting..." : "Submit Problem"}
+            {loading ? "Updating..." : "Update Problem"}
           </button>
         </form>
       </div>

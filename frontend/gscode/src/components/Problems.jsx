@@ -59,10 +59,15 @@ const Problems = () => {
               </Link>
             ))}
           </ul>
-          <div className="my-12 flex justify-center">
+          <div className="my-12 flex flex-col gap-12 justify-center">
             <Link to="/add-problem">
               <button className="bg-blue-600 text-xl text-white py-5 px-20 rounded-xl transition-all duration-300 hover:scale-103 hover:bg-blue-800 cursor-pointer">
                 ADD A PROBLEM
+              </button>
+            </Link>
+            <Link to="/edit-problem">
+              <button className="bg-blue-600 text-xl text-white py-5 px-20 rounded-xl transition-all duration-300 hover:scale-103 hover:bg-blue-800 cursor-pointer">
+                EDIT PROBLEM
               </button>
             </Link>
           </div>
