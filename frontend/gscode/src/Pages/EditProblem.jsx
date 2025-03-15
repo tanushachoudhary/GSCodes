@@ -13,12 +13,10 @@ const EditProblem = () => {
     description: "",
     difficulty: "",
     tags: "",
-    constraints: "",
     testCases: [],
   });
 
   useEffect(() => {
-    // Fetch existing problem details
     const fetchProblem = async () => {
       try {
         const response = await fetch(`/api/problems/${id}`);
@@ -83,7 +81,8 @@ const EditProblem = () => {
           Edit Problem
         </h1>
 
-        <form className="space-y-4">
+        <form className="space-y-3">
+          <label className="block font-medium text-lg">Title</label>
           <input
             name="title"
             value={formData.title}
@@ -92,7 +91,7 @@ const EditProblem = () => {
             placeholder="Enter problem title"
             required
           />
-
+          <label className="block font-medium text-lg">Description</label>
           <textarea
             name="description"
             value={formData.description}
@@ -101,7 +100,7 @@ const EditProblem = () => {
             placeholder="Describe the problem..."
             required
           />
-
+          <label className="block font-medium text-lg">Difficulty</label>
           <select
             name="difficulty"
             value={formData.difficulty}
@@ -114,21 +113,15 @@ const EditProblem = () => {
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
           </select>
-
+          <label className="block font-medium text-lg">
+            Tags (comma-separated)
+          </label>
           <input
             name="tags"
             value={formData.tags}
             onChange={handleChange}
             className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
             placeholder="Tags (comma-separated)"
-          />
-
-          <textarea
-            name="constraints"
-            value={formData.constraints}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
-            placeholder="Constraints (e.g., 1 ≤ n ≤ 10^5)"
           />
 
           <div>
@@ -156,7 +149,7 @@ const EditProblem = () => {
                 />
                 <button
                   type="button"
-                  className="p-2 bg-red-500 text-white rounded w-full md:w-auto hover:scale-110"
+                  className="p-2 bg-red-500 text-white rounded w-full md:w-auto hover:scale-110  transition-all duration-300 ease-in-out transform cursor-pointer"
                   onClick={() => removeTestCase(index)}
                 >
                   ✕
@@ -174,7 +167,7 @@ const EditProblem = () => {
 
           <button
             type="submit"
-            className="w-full p-3 bg-blue-600 text-white rounded hover:bg-blue-800 text-xl cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105"
+            className="w-full p-3 mt-5 bg-blue-600 text-white rounded hover:bg-blue-800 text-xl cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-102"
             disabled={loading}
           >
             {loading ? "Updating..." : "Update Problem"}

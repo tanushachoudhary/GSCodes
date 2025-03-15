@@ -12,7 +12,6 @@ const AddProblem = () => {
     description: "",
     difficulty: "",
     tags: "",
-    constraints: "",
     testCases: [],
   });
 
@@ -104,15 +103,7 @@ const AddProblem = () => {
             className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
             placeholder="Tags (comma-separated)"
           />
-          <label className="block font-medium text-lg">Constraints</label>
-          <textarea
-            name="constraints"
-            value={formData.constraints}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
-            placeholder="Constraints (e.g., 1 ≤ n ≤ 10^5)"
-          />
-
+         
           <div>
             <label className="block font-medium text-lg">Test Cases</label>
             {formData.testCases.map((testCase, index) => (
