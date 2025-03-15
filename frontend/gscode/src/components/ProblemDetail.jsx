@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import problems from "../assets/problemsData";
+import { API } from "../service/api";
 
 const ProblemDetail = () => {
   const [code, setCode] = useState("// Write your solution here\n");
@@ -14,6 +15,7 @@ const ProblemDetail = () => {
   }
   return (
     <div className="bg-gray-950 h-screen p-4 overflow-hidden">
+      <button>Update</button>
       <div className="flex h-full gap-5">
         {/* Left Section: Problem Details */}
         <div className="w-1/2 bg-gray-500 p-6 rounded-xl shadow-md justify-center">

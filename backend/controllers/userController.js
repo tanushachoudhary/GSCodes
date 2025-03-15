@@ -10,8 +10,8 @@ const signupUser = async(req, res) =>{
     console.log("api callback working");
     try{
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const user = {StudentUsername: req.body.enrollmentNo, StudentName: req.body.name, StudentEmail: req.body.email, Password: hashedPassword, Batch: req.body.passingYear, currentYear: req.body.studyingYear};
-        if(!user.StudentUsername || !user.StudentName || !user.StudentEmail || !user.Password || !user.Batch || !user.currentYear || !user.currentYear){
+        const user = {role: req.body.role, StudentUsername: req.body.enrollmentNo, StudentName: req.body.name, StudentEmail: req.body.email, Password: hashedPassword, Batch: req.body.passingYear, currentYear: req.body.studyingYear};
+        if(!user.role || !user.StudentUsername || !user.StudentName || !user.StudentEmail || !user.Password || !user.Batch || !user.currentYear || !user.currentYear){
             return res.status(400).json({msg: "all fields are required"});
         }
         console.log(user);

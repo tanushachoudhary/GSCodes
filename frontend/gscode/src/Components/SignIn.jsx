@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { ToastContainer ,toast } from "react-toastify";
@@ -8,6 +8,7 @@ import instituteLogo from "../assets/sgsitslogo.png";
 import Header from "./Header";
 import {API} from "../service/api.js";
 import { Navigate, useNavigate } from "react-router-dom";
+import { DataContext } from "../context/DataProvider.jsx";
 
 
 const initialLogInValues = {
@@ -15,9 +16,16 @@ const initialLogInValues = {
   password: "",
 }
 
-export default function SignIn({userAuthentication}) {
+export default function SignIn({userAuthentication, authStatus}) {
   const [formData, setFormData] = useState(initialLogInValues);
   const [errors, setErrors] = useState({});
+
+  const {account, setAccount} = useContext(DataContext);
+
+  useEffect(() => {
+      console.log("Updated Account:", account);
+      console.log(authStatus);
+  }, [account, authStatus]); 
 
   const navigate = useNavigate();
   const validateField = (name, value) => {
@@ -45,6 +53,10 @@ export default function SignIn({userAuthentication}) {
     let response = await API.userLogin(formData);
     console.log("Login Form Submitted", formData);
     console.log(response);
+    localStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
+    localStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
+
+    setAccount({username: response.data.data.StudentUsername, name: response.data.data.StudentName, role: response.data.data.role})
     userAuthentication(true);
     setFormData({ enrollmentNo: "", password: "" });
     setErrors({});
@@ -53,7 +65,7 @@ export default function SignIn({userAuthentication}) {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <Header />
+      <Header authStatus={authStatus}/>
       <div className="flex flex-col mt-10 bg-gray-100 p-4">
         <Card className="w-full max-w-sm shadow-lg">
           <CardHeader className="flex flex-col items-center">

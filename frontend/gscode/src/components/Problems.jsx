@@ -1,11 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import problems from "../assets/problemsData";
 import Header from "./Header";
 import Footer from "./Footer";
+import { DataContext } from "../context/DataProvider";
+import { API } from "../service/api";
+
 
 const Problems = () => {
   const [problemList, setProblemList] = useState(problems);
+  const {account} = useContext(DataContext);
+
+  
+const testing = {
+  questionId: 7,
+  questionDesc: "naofnowfow",
+  questionTitle: "Two Sum",
+  questionDifficulty: "Easy",
+  tags: ["arrays", "Strings"],
+  testCases: [
+    {
+      testCaseId: 1,
+      ipData: 1,
+      opData: 1,
+    },
+  ],
+}
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
@@ -20,12 +40,30 @@ const Problems = () => {
     }
   };
 
+  const onClickAdd = async() =>{
+    try{
+      let response =await API.adminAddQuestion(testing);
+
+      if(response?.status === 200 || response?.status === 201){
+        console.log("Question added successfully", response);
+      }else{
+        console.log("Failed to add question");
+      }
+    }catch(err){
+      console.log("Error: ", err);
+    }
+  }
+
   return (
     <div className="bg-gray-950">
       <Header/>
       <div className="max-w-7xl m-auto">
         <div className="p-8 mx-auto font-georgia bg-gray-950 mt-20">
           <h1 id="problems" className="text-white text-center text-5xl font-bold">Problems</h1>
+          {
+            account.role==="Admin" &&
+            <button onClick={onClickAdd} className="border border-pink text-amber-50">Add problem</button>
+          }
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-7">
             {problemList.map((problem) => (
               <Link
@@ -39,6 +77,16 @@ const Problems = () => {
                   <p className={`mt-2 font-semibold ${getDifficultyColor(problem.problemDifficulty)}`}>
                     {problem.problemDifficulty}
                   </p>
+                  {
+                    account.username === problem.createdBy ?
+                    <>
+                     <button>Update</button>
+                     <button>Delete</button>
+                    </>
+                    :
+                    <>
+                    </>
+                  }
                 </div>
                 <div className="mt-2">
                   <p className="text-gray-500">Tags: {problem.problemTags.join(", ")}</p>

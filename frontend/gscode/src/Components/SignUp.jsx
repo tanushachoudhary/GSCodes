@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
-/* import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; */
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 import instituteLogo from "../assets/sgsitslogo.png";
 import Header from "./Header";
@@ -10,6 +10,7 @@ import {API} from "../service/api.js";
 
 /* toast.configure(); */
 const initialFormValues = {
+  role: "",
   enrollmentNo: "",
   name: "",
   email: "",
@@ -19,8 +20,10 @@ const initialFormValues = {
   studyingYear: "",
 };
 
+
+
 export default function SignUp() {
-  
+  const roleList = ["Admin", "Student"];
   const [formData, setFormData] = useState(initialFormValues);
   const [errors, setErrors] = useState({});
 
@@ -62,7 +65,7 @@ export default function SignUp() {
     e.preventDefault();
     if (Object.values(errors).some((err) => err !== "")) return;
     let response = await API.userSignup(formData);
-    /* toast.success("Sign Up Successful!"); */
+    toast.success("Sign Up Successful!");
     console.log("Sign Up Form Submitted", formData);
     console.log(response);
     setFormData(initialFormValues);
@@ -83,6 +86,14 @@ export default function SignUp() {
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleSubmit}>
+              <select className='border p-2 rounded' name="role" value={formData.role} onChange={(e)=>setFormData({...formData, [e.target.name]: e.target.value})}>
+                  <option value="">Select a role</option>
+                  {
+                      roleList.map((role)=>(
+                          <option key={role} value={role}>{role}</option>
+                      ))
+                  }
+              </select>
               <Input type="text" name="enrollmentNo" placeholder="Enrollment Number" value={formData.enrollmentNo} onChange={handleChange} required/>
               {errors.enrollmentNo && <p className="text-red-500 text-sm">{errors.enrollmentNo}</p>}
               <Input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
