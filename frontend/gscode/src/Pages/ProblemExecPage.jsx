@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import problems from "../assets/problemsData.js";
 import MonacoEditor from "react-monaco-editor";
 import { API } from "../service/api";
 
@@ -10,11 +9,12 @@ const STARTER_CODE = {
 };
 
 const ProblemExecPage = () => {
+  const [problems, setProblems] = useState([]);
   const { id } = useParams();
   const problem = problems.find((p) => p.problemID === parseInt(id));
   const [code, setCode] = useState("");
   const [stdin, setStdin] = useState(
-    problem.inputTestCases?.map((testCase) => testCase.input).join("\n") || ""
+    problem.testCases?.map((testCase) => testCase.input).join("\n") || ""
   );
   const [language, setLanguage] = useState("cpp"); // Default language is C++
   const [result, setResult] = useState("");
@@ -31,7 +31,19 @@ const ProblemExecPage = () => {
 
   useEffect(() => {
     setCode(STARTER_CODE[language.toLowerCase()] || "");
-  }, [language]);
+    const fetchProblem = async () => {
+      try {
+        const response = await API.get(`/problems/${id}`); // Assuming API is set up properly
+        if (response.status === 200) {
+          setProblems([response.data]); // Store fetched problem inside an array
+        }
+      } catch (error) {
+        console.error("Error fetching problem:", error);
+      }
+    };
+  
+    fetchProblem();
+  }, [language, id]);
 
   const handleCompile = async () => {
     setIsLoading2(true); // Set loading state to true while running

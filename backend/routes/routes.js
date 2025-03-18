@@ -8,5 +8,6 @@ const router = express.Router();
 router.post("/signup", userFunctions.signupUser);
 router.post("/login", userFunctions.loginUser);
 router.post("/addNewQuestion", adminFunctions.addNewProblem);
+router.get("/getProblems", adminFunctions.getProblems);
 
 export default router;
