@@ -140,8 +140,10 @@ const problems = [
     problemTitle: "Watson asks Does Permutation Exist",
     problemDescription:
       "Sherlock is not sure that a solution exists, so he asks you.",
+
     problemDescriptionDetail:
       "Watson gives an array A of N integers A1, A2, ..., AN to Sherlock. He wants Sherlock to reorganize the array in a way such that no two adjacent numbers differ by more than 1. Formally, if reorganized array is B1, B2, ..., BN, then the condition that | Bi - Bi + 1 | ≤ 1, for all 1 ≤ i < N(where |x| denotes the absolute value of x) should be met.",
+      
     problemDifficulty: "Hard",
     problemCreatedBy: "Admin",
     problemTags: ["Dynamic Programming"],
@@ -161,6 +163,7 @@ const problems = [
       "What is the maximum number of pairs that can be formed?",
     problemDescriptionDetail:
       "There are N students standing in a row and numbered 1 through N from left to right. You are given a string S with length N, where for each valid i, the i-th character of S is 'x' if the i-th student is a girl or 'y' if this student is a boy. Students standing next to each other in the row are friends. The students are asked to form pairs for a dance competition. Each pair must consist of a boy and a girl. Two students can only form a pair if they are friends. Each student can only be part of at most one pair. What is the maximum number of pairs that can be formed?",
+   
     problemDifficulty: "Medium",
     problemCreatedBy: "Admin",
     problemTags: ["String", "Greedy"],
