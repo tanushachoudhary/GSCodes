@@ -114,14 +114,14 @@ const ProblemExecPage = () => {
       <div className="flex flex-1 h-full gap-8 p-7">
         {/* Left Section: Problem Details */}
         <div className="w-1/2 bg-gray-400 p-6 rounded-xl shadow-md flex flex-col h-full overflow-y-auto">
-          <h1 className="text-4xl font-bold mb-4 p-2 text-gray-900">
+          <h1 className="text-3xl font-bold mb-4 p-2 text-gray-900">
             {problem.problemTitle}
           </h1>
-          <div className="bg-gray-300 rounded-2xl my-5 p-4">
+          <div className="bg-gray-300 rounded-2xl my-1 p-4">
             <p className="text-black text-lg p-2">
               {problem.problemDescriptionDetail}
             </p>
-            <p className="mt-4 text-lg p-2">
+            <p className="mt-3 text-lg p-2">
               Difficulty:{" "}
               <span
                 className={`font-semibold text-lg p-2 ${getDifficultyColor(
@@ -131,10 +131,10 @@ const ProblemExecPage = () => {
                 {problem.problemDifficulty}
               </span>
             </p>
-            <p className="mt-4 text-lg p-2">
+            <p className="mt-3 text-lg p-2">
               Created by: {problem.problemCreatedBy}
             </p>
-            <div className="mt-4 text-lg p-2">
+            <div className="mt-3 text-lg p-2">
               <strong>Tags:</strong> {problem.problemTags.join(", ")}
             </div>
           </div>
@@ -146,7 +146,7 @@ const ProblemExecPage = () => {
                 Input:
               </h3>
               {problem.inputTestCases.map((testCase, index) => (
-                <p key={index} className="text-black">
+                <p key={index} className="text-black text-lg px-1">
                   {testCase.input}
                 </p>
               ))}
@@ -157,7 +157,7 @@ const ProblemExecPage = () => {
                 Output:
               </h3>
               {problem.inputTestCases.map((testCase, index) => (
-                <p key={index} className="text-black">
+                <p key={index} className="text-black text-lg px-1">
                   {testCase.output}
                 </p>
               ))}
@@ -165,7 +165,7 @@ const ProblemExecPage = () => {
           </div>
 
           {/* Additional Sections */}
-          <div className="bg-gray-300 rounded-2xl my-5 p-4">
+          <div className="bg-gray-300 rounded-2xl my-3 p-4">
             <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">
               Constraints:
             </h3>
