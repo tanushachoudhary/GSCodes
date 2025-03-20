@@ -24,7 +24,7 @@ const API_HOST = "judge029.p.rapidapi.com";
 const languageMapping = {
   cpp: 54, // C++ (GCC 9.2.0)
   java: 62, // Java (OpenJDK 11)
-};
+};  
 
 // Define the options object for Judge0 API requests
 const options = {
