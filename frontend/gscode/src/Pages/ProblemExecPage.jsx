@@ -57,14 +57,15 @@ const ProblemExecPage = () => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    const testCaseResults = []; // To store results for all test cases
+    setResult(""); // Clear previous result
+    const testCaseResults = [];
 
     try {
-      // Loop through each test case
       for (let i = 0; i < problem.inputTestCases.length; i++) {
         const testCase = problem.inputTestCases[i];
 
-        // Execute the code for the current test case
+        console.log(`Submitting Test Case ${i + 1}:`, testCase.input);
+
         const response = await fetch("http://localhost:8000/judge", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -76,23 +77,40 @@ const ProblemExecPage = () => {
         });
 
         const data = await response.json();
-        const expectedOutput = testCase.output.trim();
-        const actualOutput = data.stdout?.trim();
+        console.log(`Response for Test Case ${i + 1}:`, data);
 
-        // Compare actual output with expected output and push result to the array
-        if (actualOutput === expectedOutput) {
+        if (!data.stdout) {
+          console.error(`Error: Missing stdout for Test Case ${i + 1}`);
+          testCaseResults.push(`Test Case ${i + 1}: ❌ Execution Failed`);
+          continue;
+        }
+
+        // Ensure expectedOutput is not undefined
+        const expectedOutput = testCase.output
+          ? testCase.output.trim().replace(/\s+/g, " ")
+          : "";
+        const actualOutput = data.stdout.trim().replace(/\s+/g, " ");
+
+        console.log(
+          `Comparing: Expected: "${expectedOutput}" | Actual: "${actualOutput}"`
+        );
+
+        if (expectedOutput === "") {
+          testCaseResults.push(
+            `Test Case ${i + 1}: ⚠️ No Expected Output Defined`
+          );
+        } else if (actualOutput === expectedOutput) {
           testCaseResults.push(`Test Case ${i + 1}: ✅ Correct Answer`);
         } else {
           testCaseResults.push(`Test Case ${i + 1}: ❌ Wrong Answer`);
         }
       }
 
-      // Set the final result by joining all test case results
       setResult(testCaseResults.join("\n"));
-      setStdout(""); // Clear stdout after processing all test cases
-    } catch (error) {
-      setResult("⚠️ Error executing code");
       setStdout("");
+    } catch (error) {
+      console.error("Error executing test cases:", error);
+      setResult("⚠️ Error executing code");
     } finally {
       setIsLoading(false);
     }
