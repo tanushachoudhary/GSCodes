@@ -11,17 +11,23 @@ conn.once("open", () => {
 });
 
 
-export const uploadImg = (req,res) =>{
-  console.log("upload File recieved");
-    //we first check if we are getting a file in request 
-    if (!req.file) {
-        console.log("No file has been received");
-        return res.status(400).json({ message: " No file uploaded" });
-      }
-    
-      console.log("File has been uploaded successfully", req.file);
-      const imageurl = `${url}/file/${req.file.filename}`;
+export const uploadImage = (req,res) =>{
+  if(!req.file){
+      return res.status(404).json({msg: "file not found"});
+  }
 
-    res.status(200).json(imageurl);
+  const imageUrl = `${url}/file/${req.file.filename}`;
+
+  return res.status(200).json(imageUrl);
+}
+
+export const getImage = async(req, res) =>{
+  try{
+      const file = await gfs.files.findOne({filename: req.params.filename});
+      const readStream = gridfsBucket.openDownloadStream(file._id);
+      readStream.pipe(res);
+  }catch(err){
+      return res.status(500).json({msg:err.message});
+  }
 }
 

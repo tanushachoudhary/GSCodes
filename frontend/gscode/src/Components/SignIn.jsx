@@ -56,7 +56,7 @@ export default function SignIn({userAuthentication, authStatus}) {
     localStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
     localStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
 
-    setAccount({username: response.data.data.StudentUsername, name: response.data.data.StudentName, role: response.data.data.role})
+    setAccount({_id:response.data.data._id, username: response.data.data.StudentUsername, name: response.data.data.StudentName, role: response.data.data.role})
     userAuthentication(true);
     setFormData({ enrollmentNo: "", password: "" });
     setErrors({});

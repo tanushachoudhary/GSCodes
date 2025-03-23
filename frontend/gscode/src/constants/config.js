@@ -4,6 +4,10 @@ export const SERVICE_URL = {
     userLogin : {url: "/login", method: 'POST'},
     adminAddQuestion : {url: "/addNewQuestion", method: "POST"},
     getAllProblems : {url:"/getProblems", method: "GET"},
+    getPosts: { url: "/api/posts", method: "GET" },
+    createPosts: { url: "/api/posts", method: "POST" },
+    updatePosts: { url: "/api/posts/update/:id", method: "PUT" },
+    deletePosts: { url: "/api/posts/delete/:id", method: "DELETE`" },
 }
 
 export const API_NOTIF_MESSAGES = {

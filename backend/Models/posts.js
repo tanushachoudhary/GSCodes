@@ -1,7 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 
 const postSchema = new mongoose.Schema({
-    postId: {
+    title: {
         type: String,
         required: true,
     },
@@ -13,12 +13,15 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
+    user:{
+        type: String,
+        required: true,
+    },
     createdAt:{
         type: Date,
-
     }
 });
 
-const Posts = new mongoose.Model("Post", postSchema);
+const Posts = mongoose.model("Post", postSchema);
 
 export default Posts;
