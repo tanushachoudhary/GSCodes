@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import problems from "../assets/problemsData.js";
 import MonacoEditor from "react-monaco-editor";
-import { API } from "../service/api";
+import axios from "axios";
 
 const STARTER_CODE = {
   cpp: '#include <iostream>\nusing namespace std;\nint main() {\n\tcout << "Hello, World!";\n\treturn 0;\n}',
@@ -10,32 +9,51 @@ const STARTER_CODE = {
 };
 
 const ProblemExecPage = () => {
-  const { id } = useParams();
-  const problem = problems.find((p) => p.problemID === parseInt(id));
+  const { id } = useParams(); 
+  const [problem, setProblem] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [code, setCode] = useState("");
-  const [stdin, setStdin] = useState(
-    problem.inputTestCases?.map((testCase) => testCase.input).join("\n") || ""
-  );
-  const [language, setLanguage] = useState("cpp"); // Default language is C++
+  const [stdin, setStdin] = useState("");
+  const [language, setLanguage] = useState("cpp");
   const [result, setResult] = useState("");
   const [stdout, setStdout] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoading2, setIsLoading2] = useState(false);
-  const [compilationError, setCompilationError] = useState("");
 
-  if (!problem) {
-    return (
-      <p className="text-white text-center mt-20 text-2xl">Problem not found</p>
-    );
-  }
+  // Fetch problem using axios
+  useEffect(() => {
+    const fetchProblem = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/problem/${id}`);
+        if (response.status === 200) {
+          setProblem(response.data);
+          setStdin(response.data.testCases?.[0]?.ipData || "");
+        }
+      } catch (error) {
+        console.error("Error fetching problem:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchProblem();
+  }, [id]);
+
+  // Update code when language changes
   useEffect(() => {
     setCode(STARTER_CODE[language.toLowerCase()] || "");
   }, [language]);
 
+  if (loading) {
+    return <p className="text-white text-center mt-20 text-2xl">Loading...</p>;
+  }
+  if (!problem) {
+    return <p className="text-white text-center mt-20 text-2xl">Problem not found</p>;
+  }
+
   const handleCompile = async () => {
-    setIsLoading2(true); // Set loading state to true while running
-    setCompilationError(""); // Reset any previous compilation errors (if applicable)
+    setIsLoading2(true);
+    // Removed setCompilationError since we don't have that state defined
     try {
       const response = await fetch("http://localhost:8000/judge", {
         method: "POST",
@@ -47,59 +65,37 @@ const ProblemExecPage = () => {
       // Just show the output for the first test case (for simplicity)
       setStdout(data.stdout || "No output");
     } catch (error) {
-      // Display error message if code execution fails
       setResult("⚠️ Error executing code");
-      setStdout(""); // Clear previous output
+      setStdout("");
     } finally {
-      setIsLoading2(false); // Set loading state back to false after execution
+      setIsLoading2(false);
     }
   };
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    setResult(""); // Clear previous result
     const testCaseResults = [];
 
     try {
-      for (let i = 0; i < problem.inputTestCases.length; i++) {
-        const testCase = problem.inputTestCases[i];
-
-        console.log(`Submitting Test Case ${i + 1}:`, testCase.input);
+      // Loop through each test case (note: we use problem.testCases here)
+      for (let i = 0; i < problem.testCases.length; i++) {
+        const testCase = problem.testCases[i];
 
         const response = await fetch("http://localhost:8000/judge", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             code,
-            stdin: testCase.input.trim(),
+            stdin: testCase.ipData.trim(),
             language,
           }),
         });
 
         const data = await response.json();
-        console.log(`Response for Test Case ${i + 1}:`, data);
+        const expectedOutput = testCase.opData.trim();
+        const actualOutput = data.stdout?.trim();
 
-        if (!data.stdout) {
-          console.error(`Error: Missing stdout for Test Case ${i + 1}`);
-          testCaseResults.push(`Test Case ${i + 1}: ❌ Execution Failed`);
-          continue;
-        }
-
-        // Ensure expectedOutput is not undefined
-        const expectedOutput = testCase.output
-          ? testCase.output.trim().replace(/\s+/g, " ")
-          : "";
-        const actualOutput = data.stdout.trim().replace(/\s+/g, " ");
-
-        console.log(
-          `Comparing: Expected: "${expectedOutput}" | Actual: "${actualOutput}"`
-        );
-
-        if (expectedOutput === "") {
-          testCaseResults.push(
-            `Test Case ${i + 1}: ⚠️ No Expected Output Defined`
-          );
-        } else if (actualOutput === expectedOutput) {
+        if (actualOutput === expectedOutput) {
           testCaseResults.push(`Test Case ${i + 1}: ✅ Correct Answer`);
         } else {
           testCaseResults.push(`Test Case ${i + 1}: ❌ Wrong Answer`);
@@ -109,87 +105,68 @@ const ProblemExecPage = () => {
       setResult(testCaseResults.join("\n"));
       setStdout("");
     } catch (error) {
-      console.error("Error executing test cases:", error);
       setResult("⚠️ Error executing code");
+      setStdout("");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleKeyDown = (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-      handleSubmit();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [code, language]);
 
   return (
     <div className="bg-gray-950 h-screen flex flex-col">
       <div className="flex flex-1 h-full gap-8 p-7">
         {/* Left Section: Problem Details */}
         <div className="w-1/2 bg-gray-400 p-6 rounded-xl shadow-md flex flex-col h-full overflow-y-auto">
-          <h1 className="text-3xl font-bold mb-4 p-2 text-gray-900">
-            {problem.problemTitle}
+          <h1 className="text-4xl font-bold mb-4 p-2 text-gray-900">
+            {problem.questionTitle}
           </h1>
-          <div className="bg-gray-300 rounded-2xl my-1 p-4">
+          <div className="bg-gray-300 rounded-2xl my-5 p-4">
             <p className="text-black text-lg p-2">
-              {problem.problemDescriptionDetail}
+              {problem.questionDesc}
             </p>
-            <p className="mt-3 text-lg p-2">
+            <p className="mt-4 text-lg p-2">
               Difficulty:{" "}
-              <span
-                className={`font-semibold text-lg p-2 ${getDifficultyColor(
-                  problem.problemDifficulty
-                )}`}
-              >
-                {problem.problemDifficulty}
+              <span className={`font-semibold text-lg p-2 ${getDifficultyColor(problem.problemDifficulty)}`}>
+                {problem.questionDifficulty}
               </span>
             </p>
-            <p className="mt-3 text-lg p-2">
-              Created by: {problem.problemCreatedBy}
+            <p className="mt-4 text-lg p-2">
+              Created by: {problem.createdBy?.StudentName}
             </p>
-            <div className="mt-3 text-lg p-2">
-              <strong>Tags:</strong> {problem.problemTags.join(", ")}
+            <div className="mt-4 text-lg p-2">
+              <strong>Tags:</strong> {problem.tags.join(", ")}
             </div>
           </div>
 
           {/* Input / Output Section */}
-          <div className="rounded-2xl my-5 flex gap-8">
-            <div className="bg-gray-300 rounded-2xl p-5 w-1/2">
-              <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">
-                Input:
-              </h3>
-              {problem.inputTestCases.map((testCase, index) => (
-                <p key={index} className="text-black text-lg px-1">
-                  {testCase.input}
-                </p>
-              ))}
+          {problem.testCases && problem.testCases.length > 0 ? (
+            <div className="rounded-2xl my-5 flex gap-8">
+              <div className="bg-gray-300 rounded-2xl p-5 w-1/2">
+                <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">Input:</h3>
+                {problem.testCases.map((testCase, index) => (
+                  <p key={testCase.testCaseId} className="text-black">
+                    {testCase.ipData}
+                  </p>
+                ))}
+              </div>
+              <div className="bg-gray-300 rounded-2xl p-5 w-1/2">
+                <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">Output:</h3>
+                {problem.testCases.map((testCase, index) => (
+                  <p key={testCase.testCaseId} className="text-black">
+                    {testCase.opData}
+                  </p>
+                ))}
+              </div>
             </div>
-
-            <div className="bg-gray-300 rounded-2xl p-5 w-1/2">
-              <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">
-                Output:
-              </h3>
-              {problem.inputTestCases.map((testCase, index) => (
-                <p key={index} className="text-black text-lg px-1">
-                  {testCase.output}
-                </p>
-              ))}
-            </div>
-          </div>
+          ) : (
+            <p className="text-gray-500">No test cases available.</p>
+          )}
 
           {/* Additional Sections */}
-          <div className="bg-gray-300 rounded-2xl my-3 p-4">
-            <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">
-              Constraints:
-            </h3>
-            <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">
-              Similar Problems:
-            </h3>
+          <div className="bg-gray-300 rounded-2xl my-5 p-4">
+            <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">Constraints:</h3>
+            <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">Similar Problems:</h3>
           </div>
         </div>
 
@@ -219,23 +196,21 @@ const ProblemExecPage = () => {
             value={code}
             options={{
               fontSize: 16,
-              minimap: { enabled: false }, // Hide minimap
-              wordWrap: "on", // Wrap long lines
-              scrollBeyondLastLine: false, // Prevent scrolling past last line
-              automaticLayout: true, // Adjusts size dynamically
-              formatOnPaste: true, // Auto-format on paste
-              formatOnType: true, // Auto-format while typing
+              minimap: { enabled: false },
+              wordWrap: "on",
+              scrollBeyondLastLine: false,
+              automaticLayout: true,
+              formatOnPaste: true,
+              formatOnType: true,
               autoClosingBrackets: "always",
-              quickSuggestions: true, // Enable autocomplete suggestions
-              bracketPairColorization: { enabled: true }, // Highlight bracket pairs
+              quickSuggestions: true,
+              bracketPairColorization: { enabled: true },
             }}
             onChange={(newValue) => setCode(newValue)}
           />
 
           <div className="mt-4">
-            <h3 className="text-lg font-semibold mb-2">
-              Input for your Program (stdin):
-            </h3>
+            <h3 className="text-lg font-semibold mb-2">Input for your Program (stdin):</h3>
             <textarea
               value={stdin}
               onChange={(e) => setStdin(e.target.value)}
