@@ -10,8 +10,6 @@ function Login({userAuthentication, authStatus}) {
       <div className="flex-grow flex items-center justify-center">
         <SignIn userAuthentication= {userAuthentication} authStatus={authStatus}/>
       </div>
-
-    
     </div>
   );
 }

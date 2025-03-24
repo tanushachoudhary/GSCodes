@@ -108,7 +108,7 @@ export default function SignUp() {
               {errors.passingYear && <p className="text-red-500 text-sm">{errors.passingYear}</p>}
               <Input type="text" name="studyingYear" placeholder="Year of Study" value={formData.studyingYear} onChange={handleChange} required />
               {errors.studyingYear && <p className="text-red-500 text-sm">{errors.studyignYear}</p>}
-              <Button className="w-full" type="submit">Sign Up</Button>
+              <Button className="w-full cursor-pointer" type="submit">Sign Up</Button>
             </form>
             <p className="text-center text-sm mt-4">
               Already have an account?{" "}

@@ -95,7 +95,7 @@ export default function SignIn({userAuthentication, authStatus}) {
                 required
               />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-              <Button className="w-full" type="submit">Login</Button>
+              <Button className="w-full cursor-pointer" type="submit">Login</Button>
             </form>
             <p className="text-center text-sm mt-4">
               Don't have an account?{" "}
