@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
     postId: {
@@ -12,13 +12,15 @@ const postSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        required: true,
     },
-    createdAt:{
+    createdAt: {
         type: Date,
-
+        default: Date.now, // Automatically set to the current date
     }
 });
 
-const Posts = new mongoose.Model("Post", postSchema);
+// Correct way to define a model
+const Post = mongoose.model("Post", postSchema);
 
-export default Posts;
+export default Post;
