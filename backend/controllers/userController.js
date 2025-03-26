@@ -50,4 +50,28 @@ const loginUser = async(req,res) => {
     }
 }
 
-export default {signupUser, loginUser};
+const logoutUser = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            return res.status(400).json({ error: "Refresh token is required" });
+        }
+
+        // Check if the refresh token exists in the database
+        const existingToken = await token.findOne({ token: refreshToken });
+        if (!existingToken) {
+            return res.status(400).json({ error: "Invalid refresh token" });
+        }
+
+        // Remove the refresh token from the database
+        await token.findOneAndDelete({ token: refreshToken });
+
+        return res.status(200).json({ msg: "User logged out successfully" });
+    } catch (error) {
+        return res.status(500).json({ error: "Error while logging out user" });
+    }
+};
+
+
+export default {signupUser, loginUser, logoutUser};

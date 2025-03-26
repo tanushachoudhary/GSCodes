@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import HeatMapData from "../assets/Data/HeatmapStatic";
 import HeatMapBar from "../components/ProfilePage/HeatMap/HeatMapBar";
 import ListProblems from "../components/ProfilePage/SolvedProblems/ListProblems";
 import UserBar from "../components/ProfilePage/UserSection/UserBar";
-
+import Header from "../components/Header";
+import { DataContext } from "../context/DataProvider";
 const dummyUserData = {
     username:"",
     name:"",
@@ -12,15 +13,20 @@ const dummyUserData = {
 
 function Profile(){
     let [submissions, setSubmissions] = useState(0);
+    const {account} = useContext(DataContext);
 
     useEffect(()=>{
         setSubmissions(HeatMapData.reduce((acc, day)=> acc+day.commits, 0));
     },[]);
 
     return(
+        <>
+        <div className="pb-20">
+        <Header/>
+        </div>
         <div className="flex w-full h-full justify-center items-center bg-indigo-950 text-white">
             <div className="flex flex-col w-72 h-screen justify-center items-center p-10">
-                <UserBar/>
+                <UserBar name={account.name} username={account.username}/>
             </div>
             <div className="flex flex-col w-3xl h-screen justify-center items-center p-10">
                 <div className="flex flex-col rounded-lg justify-center items-center py-5 bg-blue-600">
@@ -32,6 +38,7 @@ function Profile(){
                 </div>
             </div>            
         </div>
+        </>
     )
 }
 

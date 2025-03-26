@@ -52,7 +52,7 @@ function App() {
           <Route path="/problems" element={<Problems />} />
           <Route path="/problem/:id" element={<ProblemExecPage />} />
           <Route path="/add-problem" element={<AddProblem />} />
-          <Route path="/edit-problem" element={<EditProblem />} />
+          <Route path="/edit-problem/:id" element={<EditProblem />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/community" element={<Community />} />
           <Route path="/contact" element={<ContactUs />} />

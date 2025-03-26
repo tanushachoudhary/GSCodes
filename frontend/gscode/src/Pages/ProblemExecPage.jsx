@@ -1,53 +1,62 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import MonacoEditor from "react-monaco-editor";
 import { API } from "../service/api";
+import axios from "axios";
+import { DataContext } from "../context/DataProvider";
 
 const STARTER_CODE = {
   cpp: '#include <iostream>\nusing namespace std;\nint main() {\n\tcout << "Hello, World!";\n\treturn 0;\n}',
-  java: 'public class Main {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello, World!");\n\t}\n}',
+  java: 'import java.io,*;\n\tpublic class Main {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello, World!");\n\t}\n}',
 };
 
 const ProblemExecPage = () => {
-  const [problems, setProblems] = useState([]);
   const { id } = useParams();
-  const problem = problems.find((p) => p.problemID === parseInt(id));
+  const [problem, setProblem] = useState({});
   const [code, setCode] = useState("");
-  const [stdin, setStdin] = useState(
-    problem.testCases?.map((testCase) => testCase.input).join("\n") || ""
-  );
+  const [stdin, setStdin] = useState("");
+  const [loading, setLoading] = useState(true);
   const [language, setLanguage] = useState("cpp"); // Default language is C++
   const [result, setResult] = useState("");
   const [stdout, setStdout] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoading2, setIsLoading2] = useState(false);
-  const [compilationError, setCompilationError] = useState("");
+  const {account} = useContext(DataContext);
+  const navigate = useNavigate();
 
-  if (!problem) {
-    return (
-      <p className="text-white text-center mt-20 text-2xl">Problem not found</p>
-    );
-  }
+
+  const fetchProblem=async()=>{
+    console.log("fetchProblem() started execution");
+    try {
+      console.log("Fetching problem with ID:", id);
+      const response = await API.getThisProblem({id});
+      if(!response){
+        console.log("response not coming");
+      }
+
+      console.log("Raw Response:", response.data);
+      setProblem(response.data);
+      console.log(problem);
+    } catch (error) {
+      console.log("Error fetching problem: ",error);
+    }
+    finally{
+      setLoading(false);
+    }
+  };
+
+  useEffect(()=>{
+    console.log(`Fetching data for ${id}`);  
+    fetchProblem();
+  },[id]);
+
 
   useEffect(() => {
-    setCode(STARTER_CODE[language.toLowerCase()] || "");
-    const fetchProblem = async () => {
-      try {
-        const response = await API.get(`/problems/${id}`); // Assuming API is set up properly
-        if (response.status === 200) {
-          setProblems([response.data]); // Store fetched problem inside an array
-        }
-      } catch (error) {
-        console.error("Error fetching problem:", error);
-      }
-    };
-  
-    fetchProblem();
-  }, [language, id]);
+    setCode(STARTER_CODE[language.toLowerCase()] || "");  
+  }, [language]);
 
   const handleCompile = async () => {
     setIsLoading2(true); // Set loading state to true while running
-    setCompilationError(""); // Reset any previous compilation errors (if applicable)
     try {
       const response = await fetch("http://localhost:8000/judge", {
         method: "POST",
@@ -60,7 +69,7 @@ const ProblemExecPage = () => {
       setStdout(data.stdout || "No output");
     } catch (error) {
       // Display error message if code execution fails
-      setResult("⚠️ Error executing code");
+      setResult("Error executing code");
       setStdout(""); // Clear previous output
     } finally {
       setIsLoading2(false); // Set loading state back to false after execution
@@ -73,8 +82,8 @@ const ProblemExecPage = () => {
 
     try {
       // Loop through each test case
-      for (let i = 0; i < problem.inputTestCases.length; i++) {
-        const testCase = problem.inputTestCases[i];
+      for (let i = 0; i < problem.testCases.length; i++) {
+        const testCase = problem.testCases[i];
 
         // Execute the code for the current test case
         const response = await fetch("http://localhost:8000/judge", {
@@ -82,20 +91,20 @@ const ProblemExecPage = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             code,
-            stdin: testCase.input.trim(),
+            stdin: testCase.ipData.trim(),
             language,
           }),
         });
 
         const data = await response.json();
-        const expectedOutput = testCase.output.trim();
-        const actualOutput = data.stdout?.trim();
+        const expectedOutput = testCase.opData.trim();
+        const actualOutput = data?.stdout?.trim();
 
         // Compare actual output with expected output and push result to the array
         if (actualOutput === expectedOutput) {
-          testCaseResults.push(`Test Case ${i + 1}: ✅ Correct Answer`);
+          testCaseResults.push(`Test Case ${i + 1}: Correct Answer`);
         } else {
-          testCaseResults.push(`Test Case ${i + 1}: ❌ Wrong Answer`);
+          testCaseResults.push(`Test Case ${i + 1}: Wrong Answer`);
         }
       }
 
@@ -103,7 +112,7 @@ const ProblemExecPage = () => {
       setResult(testCaseResults.join("\n"));
       setStdout(""); // Clear stdout after processing all test cases
     } catch (error) {
-      setResult("⚠️ Error executing code");
+      setResult(" Error executing code");
       setStdout("");
     } finally {
       setIsLoading(false);
@@ -121,33 +130,75 @@ const ProblemExecPage = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [code, language]);
 
+  //function to delete a problem
+  const deleteProblem = () =>{
+    try{
+      const response = API.deleteProblem({id});
+      if(response){
+        console.log("Problem has been deleted successfully!", response);
+        navigate("/problems");
+      }else{
+        console.log("Some error with the response of api");
+      }
+    }catch(err){
+      console.log("Some error occurred, api isn't being called", err);
+    }
+  }
+
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty) {
+      case "Easy":
+        return "text-green-400";
+      case "Medium":
+        return "text-yellow-500";
+      case "Hard":
+        return "text-red-400";
+      default:
+        return "text-gray-500";
+    }
+  };
+
+
   return (
     <div className="bg-gray-950 h-screen flex flex-col">
       <div className="flex flex-1 h-full gap-8 p-7">
+      {console.log("ProblemExecPage component mounted")}
+
         {/* Left Section: Problem Details */}
         <div className="w-1/2 bg-gray-400 p-6 rounded-xl shadow-md flex flex-col h-full overflow-y-auto">
           <h1 className="text-4xl font-bold mb-4 p-2 text-gray-900">
-            {problem.problemTitle}
+            {problem?.questionTitle}
           </h1>
+          <div className="flex gap-3">
+            <Link to={`/edit-problem/${problem?._id}`}>
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-800 active:scale-95 shadow-md hover:shadow-lg">
+                Update
+              </button>
+            </Link>
+            
+            <button onClick={deleteProblem} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-800 active:scale-95 shadow-md hover:shadow-lg">
+              Delete
+            </button>
+          </div>
           <div className="bg-gray-300 rounded-2xl my-5 p-4">
             <p className="text-black text-lg p-2">
-              {problem.problemDescriptionDetail}
+              {problem?.questionDesc}
             </p>
             <p className="mt-4 text-lg p-2">
               Difficulty:{" "}
               <span
                 className={`font-semibold text-lg p-2 ${getDifficultyColor(
-                  problem.problemDifficulty
+                  problem?.questionDifficulty
                 )}`}
               >
-                {problem.problemDifficulty}
+                {problem?.questionDifficulty}
               </span>
             </p>
             <p className="mt-4 text-lg p-2">
-              Created by: {problem.problemCreatedBy}
+              Created by: {problem?.createdBy?.StudentName}
             </p>
             <div className="mt-4 text-lg p-2">
-              <strong>Tags:</strong> {problem.problemTags.join(", ")}
+              <strong>Tags:</strong> {problem?.tags?.join(", ")}
             </div>
           </div>
 
@@ -157,9 +208,9 @@ const ProblemExecPage = () => {
               <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">
                 Input:
               </h3>
-              {problem.inputTestCases.map((testCase, index) => (
-                <p key={index} className="text-black">
-                  {testCase.input}
+              {problem?.testCases?.map((testCase) => (
+                <p key={testCase._id} className="text-black">
+                  {testCase.ipData}
                 </p>
               ))}
             </div>
@@ -168,9 +219,9 @@ const ProblemExecPage = () => {
               <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">
                 Output:
               </h3>
-              {problem.inputTestCases.map((testCase, index) => (
-                <p key={index} className="text-black">
-                  {testCase.output}
+              {problem?.testCases?.map((testCase) => (
+                <p key={testCase._id} className="text-black">
+                  {testCase.opData}
                 </p>
               ))}
             </div>
@@ -178,9 +229,6 @@ const ProblemExecPage = () => {
 
           {/* Additional Sections */}
           <div className="bg-gray-300 rounded-2xl my-5 p-4">
-            <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">
-              Constraints:
-            </h3>
             <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">
               Similar Problems:
             </h3>
@@ -269,17 +317,5 @@ const ProblemExecPage = () => {
   );
 };
 
-const getDifficultyColor = (difficulty) => {
-  switch (difficulty) {
-    case "Easy":
-      return "text-green-400";
-    case "Medium":
-      return "text-yellow-500";
-    case "Hard":
-      return "text-red-400";
-    default:
-      return "text-gray-500";
-  }
-};
 
 export default ProblemExecPage;

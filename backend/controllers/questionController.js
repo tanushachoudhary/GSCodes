@@ -3,6 +3,7 @@
 //update problem for admin
 //delete problem for admin 
 import QuestionModel from '../Models/questions.js';
+import {useParams} from 'react-router-dom';
 
 const addNewProblem = async (req,res) =>{
     try {
@@ -37,9 +38,22 @@ const getProblems = async (req,res) => {
 }
 
 const updateProblem = async (req, res) => {
+    const {id} = req.query; 
+    console.log(`updating problem with id : ${id}`);
     try {
-        const { id } = req.params;
-        const updatedData = req.body;
+        const { id, dataToSend: updatedData } = req.body;
+
+        if (!id || !updatedData) {
+            return res.status(400).json({ 
+                msg: "Missing required fields: id and/or dataToSend" 
+            });
+        }
+
+        if (!updatedData.questionTitle || !updatedData.questionDesc) {
+            return res.status(400).json({ 
+                msg: "Problem data must include questionTitle and questionDesc" 
+            });
+        }
 
         let updatedProblem = await QuestionModel.findByIdAndUpdate(id, updatedData, { new: true });
 
@@ -57,7 +71,8 @@ const updateProblem = async (req, res) => {
 // Delete a problem (Admin Only)
 const deleteProblem = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.query;
+        console.log("deleting problem with id", id);
 
         let deletedProblem = await QuestionModel.findByIdAndDelete(id);
 
@@ -72,5 +87,23 @@ const deleteProblem = async (req, res) => {
     }
 };
 
+//function to fetch data of one specific problem
+const getThisProblem = async(req,res)=>{
+    try{
+        const {id} = req.query;
+        const problem = await QuestionModel.findById(id).populate(
+            "createdBy",
+            "StudentName"
+        );
+        if(!problem){
+            return res.status(404).json({msg:"Problem not found"});
+        }
 
-export default {addNewProblem, getProblems, updateProblem, deleteProblem};
+        res.status(200).json(problem);
+    }catch(err){
+        console.log(err, "Error while fetching problem");
+        res.status(500).json({msg: "Error while fetching data"});
+    }
+}
+
+export default {addNewProblem, getProblems, updateProblem, deleteProblem, getThisProblem};

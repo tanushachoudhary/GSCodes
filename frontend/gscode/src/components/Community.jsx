@@ -70,8 +70,8 @@ const deletePost = async (postId) => {
   useEffect(() => {
    setNewPost((prevPost)=>({
     ...prevPost,
-    createdBy: account?._id,
-    user: account?.name,
+    createdBy: account?._id || 111111111111,
+    user: account?.name || "Admin",
    }))
   }, [account._id, account]);
 
@@ -94,6 +94,7 @@ const deletePost = async (postId) => {
         console.log("Missing response");
       }else{
         console.log(response,"Post added successfully");
+        
       }
     }catch(err){
       console.log(err, "Error in uploading post")

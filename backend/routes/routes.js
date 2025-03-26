@@ -32,14 +32,20 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage })
 
-const router = express.Router();
+const router = express.Router({mergeParams:true});
 
 router.post("/signup", userFunctions.signupUser);
 router.post("/login", userFunctions.loginUser);
+router.delete("/logout", userFunctions.logoutUser);
+
+
 router.post("/addNewQuestion", adminFunctions.addNewProblem);
 router.get("/getProblems", adminFunctions.getProblems);
+router.get("/problem/:id", adminFunctions.getThisProblem);
+router.put("/edit-problem/:id", adminFunctions.updateProblem);
+router.delete("/deleteProblem/:id", adminFunctions.deleteProblem);
+
+
 router.get("/api/posts", postFunctions.getPosts);
 router.post("/api/posts", postFunctions.createPost);
-router.put("/api/posts/update/:id", postFunctions.updatePost);
-router.delete("/api/posts/delete/:id", postFunctions.deletePost);
 export default router;
