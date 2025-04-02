@@ -63,7 +63,7 @@ function processError(error){
             code: "",
         }
     }else{
-        console.log("ERROR IN NETWORK", error.toJSON());
+        console.log("ERROR IN NETWORK", error);
         return{
             isError: true,
             msg: API_NOTIF_MESSAGES.networkError,
@@ -78,8 +78,9 @@ for(const [key, value] of Object.entries(SERVICE_URL)){
     API[key] = (body, showUploadProgress, showDownloadProgress) => {
         return axiosInstance({
             method: value.method,
-            url: value.url,
-            data: value.method === 'DELETE' ? '' : body,//delete method mein body nahi bhejte hai apan
+            url: value.params ? value.url.replace(":id", body) : value.url,
+            params: value.method === "GET" ? body : {}, 
+            data: value.method !== "GET" && value.method !== "DELETE" ? body : "",//delete method mein body nahi bhejte hai apan
             responseType: value.responseType,
             headers: {
                 authorization: getAccessToken()

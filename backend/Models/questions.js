@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 const questionSchema = new mongoose.Schema({
-    questionId: {
-        type: String,
-        required: true,
-        unique: true,
-    },
     questionDesc: {
         type: String,
         required: true,
@@ -25,7 +21,7 @@ const questionSchema = new mongoose.Schema({
     ],
     testCases: [
        {
-        testCaseId: {type: String, required: true,},
+        testCaseId: {type: String, required: true,default: uuidv4()},
         ipData: {type: String, },
         opData: {type: String, },
        }
