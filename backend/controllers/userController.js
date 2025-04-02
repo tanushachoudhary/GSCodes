@@ -3,6 +3,7 @@ import bcrypt, { hash } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import token from "../Models/token.js";
+import ExpressError from "../utils/ExpressError.js";
 
 dotenv.config();
 
@@ -81,4 +82,31 @@ const loginUser = async (req, res) => {
   }
 };
 
-export default { signupUser, loginUser };
+
+const logoutUser = async (req, res) => {
+    try {
+        const authToken = req.query.token;
+
+        if (!authToken) {
+            return res.status(400).json({ error: "Token is required" });
+        }
+
+        const tokenParts = authToken.split(' ');
+        const tokenValue = tokenParts.length > 1 ? tokenParts[1] : tokenParts[0];
+
+        const existingToken = await token.findOne({ token: tokenValue });
+        if (!existingToken) {
+            return res.status(400).json({ error: "Invalid token" });
+        }
+
+        await token.findOneAndDelete({ token: tokenValue });
+
+        return res.status(200).json({ msg: "User logged out successfully" });
+    } catch (error) {
+        console.error("Logout error:", error);
+        return res.status(500).json({ error: "Error while logging out user" });
+    }
+};
+
+
+export default {signupUser, loginUser, logoutUser};

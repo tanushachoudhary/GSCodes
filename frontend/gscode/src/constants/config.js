@@ -1,8 +1,25 @@
 
 export const SERVICE_URL = {
+    /* AUTHENTICATION SERVICES */
+    /* --------------------------------------------- */
     userSignup : {url:"/signup" , method: 'POST'},
     userLogin : {url: "/login", method: 'POST'},
+    userLogout : {url: "/logout", method: 'DELETE', query:true, params: true},
+
+    /* ADMIN FUNCTIONS PERTAINING TO QUESTIONS */
+    /* --------------------------------------------- */
     adminAddQuestion : {url: "/addNewQuestion", method: "POST"},
+    getAllProblems : {url:"/getProblems", method: "GET"},
+    getThisProblem : {url: "/problem/:id", method: "GET", params: true},
+    updateThisProblem : {url: "/edit-problem/:id", method: "PUT", params: true},
+    deleteProblem: {url: "/deleteProblem/:id", method: "DELETE", params: true},
+
+    /* USER FUNCTIONS TO POSTS */
+    /* --------------------------------------------- */
+    getPosts: { url: "/api/posts", method: "GET" },
+    createPosts: { url: "/api/posts", method: "POST" },
+    updatePosts: { url: "/api/posts/update/:id", method: "PUT", params: true },
+    deletePosts: { url: "/api/posts/delete", method: "DELETE" , query: true},
 }
 
 export const API_NOTIF_MESSAGES = {

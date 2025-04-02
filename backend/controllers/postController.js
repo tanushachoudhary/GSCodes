@@ -1,96 +1,90 @@
-import Post from "../Models/posts.js";
-import mongoose from "mongoose";
+import Posts from "../Models/posts.js";
+import userController from "./userController.js";
 
-// ✅ Create a new post
-export const createPost = async (req, res) => {
+
+const getPosts = async (req, res) => {
   try {
-    const { postId, content, createdBy } = req.body;
-
-    if (!postId || !content || !createdBy) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
-
-    const newPost = new Post({
-      postId,
-      content,
-      createdBy,
-    });
-
-    await newPost.save();
-    res.status(201).json(newPost);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// ✅ Get all posts
-export const getAllPosts = async (req, res) => {
-  try {
-    const posts = await Post.find().populate("createdBy", "username email"); // Populate user details
+    const posts = await Posts.find().sort({ createdAt: -1 });
     res.status(200).json(posts);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
-// ✅ Get a post by ID
-export const getPostById = async (req, res) => {
+
+const createPost = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid post ID" });
-    }
+    const { title, content, createdBy, createdAt, user } = req.body;
+    const newPost = new Posts({ title: title, content: content, createdBy: createdBy, createdAt: createdAt, user: user});
 
-    const post = await Post.findById(id).populate("createdBy", "username email");
-    if (!post) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-
-    res.status(200).json(post);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const savedPost = await newPost.save();
+    res.status(200).json(savedPost);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
-// ✅ Update a post
-export const updatePost = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { content } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid post ID" });
+const updatePost = async (req, res) => {
+    try {
+      const { id } = {id: req.body.postId}; // Get post ID from URL
+      const { content } = {content: req.body.content}; // Get updated content
+  
+      console.log("Updating Post ID:", id);
+      console.log("New Content:", content);
+  
+      if (!id) return res.status(400).json({ message: "Post ID is required" });
+      if (!content) return res.status(400).json({ message: "Content cannot be empty" });
+  
+      const updatedPost = await Posts.findByIdAndUpdate(
+        id, 
+        { content },
+        { new: true } // Return updated post
+      );
+  
+      if (!updatedPost) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+  
+      res.status(200).json(updatedPost);
+    } catch (error) {
+      console.error("Error updating post:", error);
+      res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
+  };
+  
 
-    const updatedPost = await Post.findByIdAndUpdate(id, { content }, { new: true });
+const deletePost = async(req,res) => {
+    try{
+      console.log("delete post api started working");
+      
+      const { id } = req.params.id;  // Get from URL parameters
+        
+      console.log("Deleting post with id:", id);  // Debug log
+      
+      if (!id) {
+          return res.status(400).json({ 
+              success: false,
+              message: 'No ID provided' 
+          });
+      }
 
-    if (!updatedPost) {
-      return res.status(404).json({ error: "Post not found" });
+      const deletedPost = await Posts.findByIdAndDelete(id);
+      
+      if (!deletedPost) {
+          return res.status(404).json({
+              success: false,
+              message: "Post not found"
+          });
+      }
+
+      return res.status(200).json({
+          success: true,
+          message: 'Post deleted successfully'
+      });
+    }catch(err){
+        return res.status(500).json({msg: "Some error occurred while trying to delete. Try again"});
     }
+}
 
-    res.status(200).json(updatedPost);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// ✅ Delete a post
-export const deletePost = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid post ID" });
-    }
-
-    const deletedPost = await Post.findByIdAndDelete(id);
-
-    if (!deletedPost) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-
-    res.status(200).json({ message: "Post deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+export default {getPosts, createPost, updatePost, deletePost}
