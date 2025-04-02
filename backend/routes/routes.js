@@ -48,4 +48,6 @@ router.delete("/deleteProblem/:id", adminFunctions.deleteProblem);
 
 router.get("/api/posts", postFunctions.getPosts);
 router.post("/api/posts", postFunctions.createPost);
+router.put("/api/posts/update/:id", postFunctions.updatePost);
+router.delete("/api/posts/:id", postFunctions.deletePost);
 export default router;

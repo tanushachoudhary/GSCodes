@@ -4,6 +4,8 @@ import MonacoEditor from "react-monaco-editor";
 import { API } from "../service/api";
 import axios from "axios";
 import { DataContext } from "../context/DataProvider";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const STARTER_CODE = {
   cpp: '#include <iostream>\nusing namespace std;\nint main() {\n\tcout << "Hello, World!";\n\treturn 0;\n}',
@@ -65,6 +67,15 @@ const ProblemExecPage = () => {
       });
 
       const data = await response.json();
+
+      let output = data.stdout || "";
+      try {
+        // Try to decode as Base64 first
+        output = atob(output);
+      } catch (e) {
+        // If not Base64, keep original output
+      }
+
       // Just show the output for the first test case (for simplicity)
       setStdout(data.stdout || "No output");
     } catch (error) {
@@ -100,6 +111,12 @@ const ProblemExecPage = () => {
         const expectedOutput = testCase.opData.trim();
         const actualOutput = data?.stdout?.trim();
 
+        try {
+          actualOutput = atob(actualOutput).trim();
+        } catch (e) {
+          console.log(e);
+        }
+
         // Compare actual output with expected output and push result to the array
         if (actualOutput === expectedOutput) {
           testCaseResults.push(`Test Case ${i + 1}: Correct Answer`);
@@ -113,7 +130,7 @@ const ProblemExecPage = () => {
       setStdout(""); // Clear stdout after processing all test cases
     } catch (error) {
       setResult(" Error executing code");
-      setStdout("");
+      setStdout(error.message || "Unknown error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -160,15 +177,20 @@ const ProblemExecPage = () => {
 
 
   return (
+    <>
+    <div className="pb-20">
+    <Header/>
+    </div>
     <div className="bg-gray-950 h-screen flex flex-col">
       <div className="flex flex-1 h-full gap-8 p-7">
-      {console.log("ProblemExecPage component mounted")}
 
         {/* Left Section: Problem Details */}
         <div className="w-1/2 bg-gray-400 p-6 rounded-xl shadow-md flex flex-col h-full overflow-y-auto">
           <h1 className="text-4xl font-bold mb-4 p-2 text-gray-900">
             {problem?.questionTitle}
           </h1>
+          {account._id === problem?.createdBy?._id 
+          ?
           <div className="flex gap-3">
             <Link to={`/edit-problem/${problem?._id}`}>
               <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-800 active:scale-95 shadow-md hover:shadow-lg">
@@ -180,6 +202,9 @@ const ProblemExecPage = () => {
               Delete
             </button>
           </div>
+          :
+          <></>
+          }
           <div className="bg-gray-300 rounded-2xl my-5 p-4">
             <p className="text-black text-lg p-2">
               {problem?.questionDesc}
@@ -314,6 +339,8 @@ const ProblemExecPage = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

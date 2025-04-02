@@ -10,7 +10,7 @@ const Header = ({authStatus}) => {
   const token = localStorage.getItem("refreshToken");
 
   const userLogout = async() =>{
-    let response = await API.userLogout(token);
+    let response = await API.userLogout({token});
     if(!response){
       console.log("Some error occured while logging out");
     }else{

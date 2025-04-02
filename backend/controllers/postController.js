@@ -27,7 +27,7 @@ const createPost = async (req, res) => {
 
 const updatePost = async (req, res) => {
     try {
-      const { id } = req.params; // Get post ID from URL
+      const { id } = {id: req.body.postId}; // Get post ID from URL
       const { content } = {content: req.body.content}; // Get updated content
   
       console.log("Updating Post ID:", id);
@@ -54,17 +54,34 @@ const updatePost = async (req, res) => {
   };
   
 
-
-
-  export const deletePost = async(req,res) => {
+const deletePost = async(req,res) => {
     try{
-        const post = await Posts.findById(req.params.id);
-        if(!post){
-            return res.status(404).json({msg : 'Post not found'});
-        }
-        await Posts.findByIdAndDelete(req.params.id);
+      console.log("delete post api started working");
+      
+      const { id } = req.params.id;  // Get from URL parameters
+        
+      console.log("Deleting post with id:", id);  // Debug log
+      
+      if (!id) {
+          return res.status(400).json({ 
+              success: false,
+              message: 'No ID provided' 
+          });
+      }
 
-        return res.status(200).json({msg: 'post deleted'});
+      const deletedPost = await Posts.findByIdAndDelete(id);
+      
+      if (!deletedPost) {
+          return res.status(404).json({
+              success: false,
+              message: "Post not found"
+          });
+      }
+
+      return res.status(200).json({
+          success: true,
+          message: 'Post deleted successfully'
+      });
     }catch(err){
         return res.status(500).json({msg: "Some error occurred while trying to delete. Try again"});
     }

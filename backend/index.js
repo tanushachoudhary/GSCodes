@@ -84,7 +84,7 @@ app.post("/judge", async (req, res) => {
     if (resultResponse.data.status.description === "Accepted") {
       res.json({
         message: "Code executed successfully",
-        stdout: resultResponse.data.stdout,
+        stdout: resultResponse?.data?.stdout,
       });
     } else {
       const compileError = resultResponse.data.compile_output
@@ -109,6 +109,13 @@ app.post("/judge", async (req, res) => {
 });
 
 //**************************************************************/
+
+//---------------------------------------------
+/* Default error handling middleware */
+app.use((err, req, res, next)=>{
+  let {status = 500, message = "Some error has Occurred(reading at default error handler)"} = err;
+  res.status(status).send(message);
+})
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
