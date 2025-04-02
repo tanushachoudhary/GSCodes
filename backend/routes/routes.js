@@ -9,6 +9,7 @@ const router = express.Router();
 router.post("/signup", userFunctions.signupUser);
 router.post("/login", userFunctions.loginUser);
 router.post("/addNewQuestion", adminFunctions.addNewProblem);
+router.get("/getProblems", adminFunctions.getProblems);
 router.get("/problem/:id", async (req, res) => {
   try {
     const problem = await QuestionModel.findById(req.params.id).populate(

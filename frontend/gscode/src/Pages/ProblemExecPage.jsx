@@ -5,7 +5,7 @@ import axios from "axios";
 
 const STARTER_CODE = {
   cpp: '#include <iostream>\nusing namespace std;\nint main() {\n\tcout << "Hello, World!";\n\treturn 0;\n}',
-  java: 'public class Main {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello, World!");\n\t}\n}',
+  java: 'import java.io.*;\n\tpublic class Main {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello, World!");\n\t}\n}',
 };
 
 const ProblemExecPage = () => {
@@ -165,7 +165,6 @@ const ProblemExecPage = () => {
 
           {/* Additional Sections */}
           <div className="bg-gray-300 rounded-2xl my-5 p-4">
-            <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">Constraints:</h3>
             <h3 className="text-2xl font-bold mb-4 p-1 text-gray-900">Similar Problems:</h3>
           </div>
         </div>
@@ -244,6 +243,7 @@ const ProblemExecPage = () => {
               </div>
             )}
           </div>
+          
         </div>
       </div>
     </div>

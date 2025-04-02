@@ -7,7 +7,7 @@ import { DataContext } from "../context/DataProvider";
 import { API } from "../service/api";
 
 const Problems = () => {
-  const [problemList, setProblemList] = useState(problems);
+  const [problemList, setProblemList] = useState([]);
   const { account } = useContext(DataContext);
 
 
@@ -30,11 +30,12 @@ const Problems = () => {
       if(!problems){
         console.log("error in response");
       }else{
-        console.log(problems.data);
-        setProblemList(problems.data);
+        console.log(problems.data.data);
+        // console.log(problems.data.data);
+        setProblemList(problems.data.data);
       }
     }catch(err){
-      console.lof(err,"Error in fetching data");
+      console.log(err,"Error in fetching data");
     }
   }
 
@@ -55,10 +56,10 @@ const Problems = () => {
           </h1>
       
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-7">
-            {problemList.map((problem) => (
+            {problemList.map((problem, index) => (
               <Link
-                key={problem.problemID}
-                to={`/problem/${problem.problemID}`}
+                key={problem._id}
+                to={`/problem/${problem._id}`}
                 className="border-2 border-gray-700 rounded-xl p-6 bg-gray-900 text-white transition-all duration-300 hover:bg-gray-700 hover:scale-103 hover:border-gray-500 cursor-pointer"
               >
                 <h3 className="text-xl font-semibold">
@@ -91,7 +92,7 @@ const Problems = () => {
             ))}
           </ul>
           <div className="my-12 flex flex-col gap-12 justify-center">
-          {account._id && account.role === "Admin" && (
+          {account.role === "Admin" && (
             <Link
             to="/add-problem"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

@@ -3,6 +3,7 @@ export const SERVICE_URL = {
     userSignup : {url:"/signup" , method: 'POST'},
     userLogin : {url: "/login", method: 'POST'},
     adminAddQuestion : {url: "/addNewQuestion", method: "POST"},
+    getAllProblems : {url: "/getProblems", method: "GET"},
 }
 
 export const API_NOTIF_MESSAGES = {
