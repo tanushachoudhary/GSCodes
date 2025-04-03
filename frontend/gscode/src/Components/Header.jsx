@@ -1,10 +1,25 @@
 import React, { useContext } from "react";
 import instituteLogo from "../assets/sgsitslogo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DataContext } from "../context/DataProvider";
+import {API} from "../service/api.js";
 
-const Header = ({ authStatus }) => {
-  const { account } = useContext(DataContext);
+const Header = ({authStatus}) => {
+  const {account, setAccount} = useContext(DataContext);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("refreshToken");
+
+  const userLogout = async() =>{
+    let response = await API.userLogout({token});
+    if(!response){
+      console.log("Some error occured while logging out");
+    }else{
+      console.log(response);
+      setAccount({_id:"",username: "", name:"", role:""});
+      navigate("/");
+    }
+  }
+
   return (
     <nav className="bg-blue-600 opacity-95 w-screen fixed top-0 left-0 z-50">
       <div className="flex items-center justify-between w-full px-4 md:px-8 py-3">
@@ -74,12 +89,17 @@ const Header = ({ authStatus }) => {
           </Link>
           {account.username && (
             <Link
-              className="hover:bg-gray-300 hover:text-blue-600 text-lg"
-              to="/profile"
-            >
-              Profile
-            </Link>
-          )}
+            to="/profile"
+          >
+            Profile
+          </Link>)
+
+          }
+          {
+            account.username && 
+            
+            <button onClick={userLogout}>Logout</button>
+          }
         </div>
       </div>
     </nav>

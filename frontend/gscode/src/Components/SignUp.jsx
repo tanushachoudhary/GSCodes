@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card"
 import instituteLogo from "../assets/sgsitslogo.png";
 import Header from "./Header";
 import {API} from "../service/api.js";
+import { useNavigate } from "react-router-dom";
+import ExpressError from "../../../../backend/utils/ExpressError.js";
 
 /* toast.configure(); */
 const initialFormValues = {
@@ -26,6 +28,7 @@ export default function SignUp() {
   const roleList = ["Admin", "Student"];
   const [formData, setFormData] = useState(initialFormValues);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const validateField = (name, value) => {
     let error = "";
@@ -65,7 +68,11 @@ export default function SignUp() {
     e.preventDefault();
     if (Object.values(errors).some((err) => err !== "")) return;
     let response = await API.userSignup(formData);
-    toast.success("Sign Up Successful!");
+    if(!response){
+      throw new ExpressError(300, "Response empty");
+    }
+    alert("Signup successful");
+    navigate("/login");
     console.log("Sign Up Form Submitted", formData);
     console.log(response);
     setFormData(initialFormValues);

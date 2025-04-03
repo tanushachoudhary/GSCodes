@@ -1,21 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { toast } from "react-toastify";
-import {API} from "../service/api.js";
-import { js } from '@eslint/js';
+// <<<<<<< HEAD
+// import {API} from "../service/api.js";
+// import { js } from '@eslint/js';
+// =======
+import { API } from "../service/api";
+import { DataContext } from "../context/DataProvider";
 
 const AddProblem = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    difficulty: "",
-    tags: "",
-    testCases: [],
+    questionTitle: "",
+    questionDesc: "",
+    questionDifficulty: "",
+    tags: [],
+    testCases: [{
+      ipData:"",
+      opData:"",
+    }],
+    createdBy: "",
   });
+  const {account} = useContext(DataContext);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,7 +39,7 @@ const AddProblem = () => {
   const addTestCase = () => {
     setFormData({
       ...formData,
-      testCases: [...formData.testCases, { input: "", output: "" }],
+      testCases: [...formData.testCases, { ipData: "", opData: "" }],
     });
   };
 
@@ -57,6 +66,29 @@ const AddProblem = () => {
     }
   };
 
+  const onClickAdd = async (e) => {
+      e.preventDefault();
+      try {
+        let response = await API.adminAddQuestion(formData);
+  
+        if (response?.status === 200 || response?.status === 201) {
+          console.log("Question added successfully", response);
+          navigate("/problems");
+        } else {
+          console.log("Failed to add question");
+        }
+      } catch (err) {
+        console.log("Error: ", err);
+      }
+    }
+
+    useEffect(()=>{
+      setFormData((prevFormData)=>({
+        ...prevFormData,
+        createdBy: account._id
+      }))
+    },[account._id])
+
   return (
     <div className="bg-gray-950 min-h-screen flex flex-col">
       <Header />
@@ -65,11 +97,11 @@ const AddProblem = () => {
           Post a New Problem
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={onClickAdd} className="space-y-3">
           <label className="block font-medium text-lg">Title</label>
           <input
-            name="title"
-            value={formData.title}
+            name="questionTitle"
+            value={formData.questionTitle}
             onChange={handleChange}
             className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
             placeholder="Enter problem title"
@@ -77,8 +109,8 @@ const AddProblem = () => {
           />
           <label className="block font-medium text-lg">Description</label>
           <textarea
-            name="description"
-            value={formData.description}
+            name="questionDesc"
+            value={formData.questionDesc}
             onChange={handleChange}
             className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
             placeholder="Describe the problem..."
@@ -86,8 +118,8 @@ const AddProblem = () => {
           />
           <label className="block font-medium text-lg">Difficulty</label>
           <select
-            name="difficulty"
-            value={formData.difficulty}
+            name="questionDifficulty"
+            value={formData.questionDifficulty}
             onChange={handleChange}
             className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
             required
@@ -116,17 +148,17 @@ const AddProblem = () => {
                 className="flex flex-col md:flex-row md:space-x-2 items-center mb-2"
               >
                 <input
-                  value={testCase.input}
+                  value={testCase.ipData}
                   onChange={(e) =>
-                    handleTestCaseChange(index, "input", e.target.value)
+                    handleTestCaseChange(index, "ipData", e.target.value)
                   }
                   className="p-2 rounded w-full md:w-1/2 bg-white focus:ring-2 focus:ring-blue-500"
                   placeholder="Input"
                 />
                 <input
-                  value={testCase.output}
+                  value={testCase.opData}
                   onChange={(e) =>
-                    handleTestCaseChange(index, "output", e.target.value)
+                    handleTestCaseChange(index, "opData", e.target.value)
                   }
                   className="p-2 rounded w-full md:w-1/2 bg-white focus:ring-2 focus:ring-blue-500"
                   placeholder="Expected Output"

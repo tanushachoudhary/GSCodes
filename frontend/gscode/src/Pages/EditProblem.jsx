@@ -3,25 +3,53 @@ import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { toast } from "react-toastify";
+import { API } from "../service/api";
 
 const EditProblem = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    difficulty: "",
-    tags: "",
-    testCases: [],
+    questionTitle: "",
+    questionDesc: "",
+    questionDifficulty: "",
+    tags: [],
+    testCases: [{ ipData: "", opData: "" }], // Match API structure
   });
 
   useEffect(() => {
     const fetchProblem = async () => {
       try {
-        const response = await fetch(`/api/problems/${id}`);
-        const data = await response.json();
-        setFormData(data);
+        const response = await API.getThisProblem({ id });
+        console.log("Raw API response:", response); // Debug log
+        
+        if (response?.data) {
+          const apiData = response.data;
+          console.log("API Data:", apiData); // Debug log
+          
+          // Transform the API data to match our form state structure
+          setFormData({
+            questionTitle: apiData.questionTitle || "", // Handle both cases
+            questionDesc: apiData.questionDesc || "",
+            questionDifficulty: apiData.questionDifficulty || "",
+            tags: apiData.tags || [],
+            testCases: apiData.testCases?.map(tc => ({
+              ipData: tc.ipData || "",  // Keep original API field names
+              opData: tc.opData || ""   // Keep original API field names
+            })) || [{ ipData: "", opData: "" }] // Default empty test case
+          });
+          
+          console.log("FormData after set:", {
+            questionTitle: apiData.questionTitle || apiData.functionTitle || "",
+            questionDesc: apiData.questionDesc || "",
+            questionDifficulty: apiData.questionDifficulty || "",
+            tags: apiData.tags || [],
+            testCases: apiData.testCases?.map(tc => ({
+              ipData: tc.ipData || "",
+              opData: tc.opData || ""
+            })) || [{ ipData: "", opData: "" }]
+          }); // Debug log
+        }
       } catch (error) {
         console.error("Error fetching problem details:", error);
       }
@@ -42,7 +70,7 @@ const EditProblem = () => {
   const addTestCase = () => {
     setFormData({
       ...formData,
-      testCases: [...formData.testCases, { input: "", output: "" }],
+      testCases: [...formData.testCases, { ipData: "", opData: "" }],
     });
   };
 
@@ -53,25 +81,32 @@ const EditProblem = () => {
     });
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     await fetch(`/api/problems/${id}`, {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(formData),
-  //     });
-  //     toast.success("Problem updated successfully!");
-  //     navigate("/problems");
-  //   } catch (error) {
-  //     console.error("Error updating problem:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  
+  const updateProblem = async (e) =>{
+    e.preventDefault();
+    try{
+      const dataToSend = {
+        questionTitle: formData.questionTitle,
+        questionDesc: formData.questionDesc,
+        questionDifficulty: formData.questionDifficulty,
+        tags: formData.tags,
+        testCases: formData.testCases.map(tc => ({
+          ipData: tc.ipData,
+          opData: tc.opData
+        }))
+      };
+      console.log("handleSubmit has started working");
+      console.log(dataToSend);
+      
+      const response = await API.updateThisProblem({id, dataToSend});
+      console.log(response);
+      
+      navigate(`/problem/${id}`); 
+    }catch(err){
+      console.log(err,"Some error has occured");
+      
+    }
+  }
 
   return (
     <div className="bg-gray-950 min-h-screen flex flex-col">
@@ -84,8 +119,8 @@ const EditProblem = () => {
         <form className="space-y-3">
           <label className="block font-medium text-lg">Title</label>
           <input
-            name="title"
-            value={formData.title}
+            name="questionTitle"
+            value={formData.questionTitle}
             onChange={handleChange}
             className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
             placeholder="Enter problem title"
@@ -93,8 +128,8 @@ const EditProblem = () => {
           />
           <label className="block font-medium text-lg">Description</label>
           <textarea
-            name="description"
-            value={formData.description}
+            name="questionDesc"
+            value={formData.questionDesc}
             onChange={handleChange}
             className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
             placeholder="Describe the problem..."
@@ -102,8 +137,8 @@ const EditProblem = () => {
           />
           <label className="block font-medium text-lg">Difficulty</label>
           <select
-            name="difficulty"
-            value={formData.difficulty}
+            name="questionDifficulty"
+            value={formData.questionDifficulty}
             onChange={handleChange}
             className="w-full p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
             required
@@ -132,17 +167,19 @@ const EditProblem = () => {
                 className="flex flex-col md:flex-row md:space-x-2 items-center mb-2"
               >
                 <input
-                  value={testCase.input}
+                  name="ipData"
+                  value={testCase.ipData}
                   onChange={(e) =>
-                    handleTestCaseChange(index, "input", e.target.value)
+                    handleTestCaseChange(index, "ipData", e.target.value)
                   }
                   className="p-2 rounded w-full md:w-1/2 bg-white focus:ring-2 focus:ring-blue-500"
                   placeholder="Input"
                 />
                 <input
-                  value={testCase.output}
+                  name="opData"
+                  value={testCase.opData}
                   onChange={(e) =>
-                    handleTestCaseChange(index, "output", e.target.value)
+                    handleTestCaseChange(index, "opData", e.target.value)
                   }
                   className="p-2 rounded w-full md:w-1/2 bg-white focus:ring-2 focus:ring-blue-500"
                   placeholder="Expected Output"
@@ -166,7 +203,7 @@ const EditProblem = () => {
           </div>
 
           <button
-            type="submit"
+            onClick={updateProblem}
             className="w-full p-3 mt-5 bg-blue-600 text-white rounded hover:bg-blue-800 text-xl cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-102"
             disabled={loading}
           >
