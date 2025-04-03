@@ -4,19 +4,61 @@
 //delete problem for admin 
 import QuestionModel from '../Models/questions.js';
 import {useParams} from 'react-router-dom';
+import { mongoose } from 'mongoose';
 
-const addNewProblem = async (req,res) =>{
+
+// const addNewProblem = async (req,res) =>{
+//     try {
+//         console.log("Incoming request body:", req.body); // 
+
+//         let {questionDesc, questionTitle, questionDifficulty, tags, testCases, createdBy } = req.body;
+
+//         if (!questionTitle || !questionDesc) {
+//             return res.status(400).json({ msg: "Missing required fields" }); 
+//         }
+
+//         const newQuestion = new QuestionModel({ questionDesc, questionTitle, questionDifficulty, tags, testCases, createdBy});
+//         console.log("ABout to be saved", newQuestion);
+//         let savedQuestion = await newQuestion.save();
+//         console.log("Saved question:", savedQuestion); 
+
+//         return res.status(201).json({ data: savedQuestion, msg: "New question has been added" });
+//     } catch (err) {
+//         console.error("Error while adding question:", err);
+//         return res.status(500).json({ msg: "Internal Server Error" });
+//     }
+// }
+const addNewProblem = async (req, res) => {
     try {
-        console.log("Incoming request body:", req.body); // 
+        console.log("Incoming request body:", req.body); 
 
-        let {questionDesc, questionTitle, questionDifficulty, tags, testCases, createdBy } = req.body;
+        let { questionDesc, questionTitle, questionDifficulty, tags, testCases, createdBy } = req.body;
 
         if (!questionTitle || !questionDesc) {
             return res.status(400).json({ msg: "Missing required fields" }); 
         }
 
-        const newQuestion = new QuestionModel({ questionDesc, questionTitle, questionDifficulty, tags, testCases, createdBy});
-        console.log("ABout to be saved", newQuestion);
+        // Ensure tags is an array (in case frontend mistakenly sends a string)
+        if (!Array.isArray(tags)) {
+            tags = [tags]; 
+        }
+
+        // Generate a unique questionId
+        const questionId = new mongoose.Types.ObjectId().toString();
+
+        // Create a new question with the generated questionId
+        const newQuestion = new QuestionModel({ 
+            questionId, 
+            questionDesc, 
+            questionTitle, 
+            questionDifficulty, 
+            tags, 
+            testCases, 
+            createdBy 
+        });
+
+        console.log("About to be saved:", newQuestion);
+
         let savedQuestion = await newQuestion.save();
         console.log("Saved question:", savedQuestion); 
 
@@ -25,7 +67,8 @@ const addNewProblem = async (req,res) =>{
         console.error("Error while adding question:", err);
         return res.status(500).json({ msg: "Internal Server Error" });
     }
-}
+};
+
 
 const getProblems = async (req,res) => {
     try{

@@ -27,25 +27,29 @@ const ProblemExecPage = () => {
   const navigate = useNavigate();
 
 
-  const fetchProblem=async()=>{
+  const fetchProblem = async () => {
     console.log("fetchProblem() started execution");
     try {
       console.log("Fetching problem with ID:", id);
-      const response = await API.getThisProblem({id});
-      if(!response){
+      const response = await API.getThisProblem({ id });
+      if (!response) {
         console.log("response not coming");
       }
-
+  
       console.log("Raw Response:", response.data);
       setProblem(response.data);
-      console.log(problem);
+  
+      // Set stdin with the first test case input if available
+      if (response.data?.testCases?.length > 0) {
+        setStdin(response.data.testCases[0].ipData);
+      }
     } catch (error) {
-      console.log("Error fetching problem: ",error);
-    }
-    finally{
+      console.log("Error fetching problem: ", error);
+    } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(()=>{
     console.log(`Fetching data for ${id}`);  
@@ -111,19 +115,33 @@ const ProblemExecPage = () => {
 
         const data = await response.json();
         const expectedOutput = testCase.opData.trim();
-        const actualOutput = data?.stdout?.trim();
+        // const actualOutput = data?.stdout?.trim();
 
-        try {
+        const isBase64 = (str) => {
+          try {
+            return btoa(atob(str)) === str; // Decode & re-encode to check validity
+          } catch (err) {
+            return false;
+          }
+        };
+        
+        let actualOutput = data?.stdout?.trim() || "";
+        
+        if (isBase64(actualOutput)) {
           actualOutput = atob(actualOutput).trim();
-        } catch (e) {
-          console.log(e);
         }
+        
+        // try {
+        //   actualOutput = atob(actualOutput).trim();
+        // } catch (e) {
+        //   console.log(e);
+        // }
 
         // Compare actual output with expected output and push result to the array
         if (actualOutput === expectedOutput) {
-          testCaseResults.push(`Test Case ${i + 1}: Correct Answer`);
+          testCaseResults.push(`Test Case ${i + 1}: ✅ Correct Answer`);
         } else {
-          testCaseResults.push(`Test Case ${i + 1}: Wrong Answer`);
+          testCaseResults.push(`Test Case ${i + 1}: ❌ Wrong Answer`);
         }
       }
 
