@@ -1,4 +1,4 @@
-import  userFunctions  from "../controllers/userController.js";
+import userFunctions from "../controllers/userController.js";
 import adminFunctions from "../controllers/questionController.js";
 import postFunctions from "../controllers/postController.js";
 /* import { authenticateToken } from "../controllers/jwtControllers.js"; */
@@ -36,6 +36,26 @@ const router = express.Router({mergeParams:true});
 
 router.post("/signup", userFunctions.signupUser);
 router.post("/login", userFunctions.loginUser);
+// <<<<<<< HEAD
+// router.post("/addNewQuestion", adminFunctions.addNewProblem);
+// router.get("/getProblems", adminFunctions.getProblems);
+// router.get("/problem/:id", async (req, res) => {
+//   try {
+//     const problem = await QuestionModel.findById(req.params.id).populate(
+//       "createdBy",
+//       "StudentName"
+//     );
+//     if (!problem) {
+//       return res.status(404).json({ message: "Problem not found" });
+//     }
+//     res.json(problem);
+//   } catch (error) {
+//     res.status(500).json({ message: "Error fetching problem" });
+//   }
+// });
+
+// export default router;
+// =======
 router.delete("/logout", userFunctions.logoutUser);
 
 

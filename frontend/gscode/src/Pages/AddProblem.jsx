@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { toast } from "react-toastify";
+// <<<<<<< HEAD
+// import {API} from "../service/api.js";
+// import { js } from '@eslint/js';
+// =======
 import { API } from "../service/api";
 import { DataContext } from "../context/DataProvider";
 
@@ -51,6 +55,8 @@ const AddProblem = () => {
     setLoading(true);
     try {
       console.log("Submitting problem:", formData);
+      const response = await API.addNewProblem(formData);
+      console.log(response);
       toast.success("Problem submitted successfully!");
       navigate("/problems");
     } catch (error) {
